@@ -1,0 +1,275 @@
+{
+  "schema_version": "1.0.0",
+  "policy": {
+    "free_and_legal_only": true,
+    "allowed_source_statuses": ["approved"],
+    "blocked_until_source_exists": true,
+    "estimate_disclaimer": "Any search volume, difficulty, revenue, download, conversion, or opportunity value produced without official owner-provided data must be labeled as an estimate with confidence and method."
+  },
+  "capabilities": [
+    {
+      "id": "keyword_rank_tracking",
+      "area": "keyword_intelligence",
+      "name": "Keyword Rank Tracking",
+      "status": "active",
+      "priority": "P0",
+      "sources": ["google_play_public_search"],
+      "properties": ["keyword", "target_package_id", "country", "language", "position", "top_results", "confidence", "warnings", "history"],
+      "logic": ["public_search_snapshot", "target_position_detection", "source_policy_gate", "history_append"],
+      "free_legal_notes": "Uses approved public Google Play search snapshots at low volume."
+    },
+    {
+      "id": "keyword_rank_history",
+      "area": "keyword_intelligence",
+      "name": "Keyword Rank History And Delta",
+      "status": "planned",
+      "priority": "P0",
+      "sources": ["google_play_public_search"],
+      "properties": ["previous_position", "current_position", "delta", "first_seen", "last_seen", "best_position", "worst_position", "volatility"],
+      "logic": ["jsonl_history_query", "rank_delta", "movement_classification", "volatility_score"],
+      "free_legal_notes": "Uses locally stored snapshots from approved rank checks."
+    },
+    {
+      "id": "keyword_database_builder",
+      "area": "keyword_intelligence",
+      "name": "Keyword Database Builder",
+      "status": "planned",
+      "priority": "P0",
+      "sources": ["google_play_public_search", "local_category_taxonomy", "google_play_reviews_public_store", "user_imported_console_exports"],
+      "properties": ["keyword", "source", "country", "language", "discovered_at", "topic", "intent", "related_apps"],
+      "logic": ["seed_expansion", "category_taxonomy_expansion", "metadata_extraction", "review_phrase_extraction", "dedupe", "source_attribution"],
+      "free_legal_notes": "No bulk mirroring. Store keyword facts and provenance, not large copied source payloads."
+    },
+    {
+      "id": "keyword_volume_estimation",
+      "area": "keyword_intelligence",
+      "name": "Keyword Search Volume Estimate",
+      "status": "planned",
+      "priority": "P1",
+      "sources": ["google_play_public_search", "user_imported_console_exports", "local_modeled_estimates"],
+      "properties": ["estimated_volume", "confidence", "method", "country", "language", "evidence_count"],
+      "logic": ["rank_density_proxy", "result_competition_proxy", "import_calibration", "confidence_band"],
+      "free_legal_notes": "Must be labeled estimate. Exact Google Play search volume is not available from free public sources."
+    },
+    {
+      "id": "keyword_difficulty_score",
+      "area": "keyword_intelligence",
+      "name": "Keyword Difficulty Score",
+      "status": "planned",
+      "priority": "P1",
+      "sources": ["google_play_public_search", "google_play_public_store", "local_modeled_estimates"],
+      "properties": ["difficulty", "confidence", "top_app_strength", "rating_strength", "install_proxy", "metadata_density"],
+      "logic": ["top_result_authority", "competitor_strength", "rating_weighting", "install_bucket_weighting"],
+      "free_legal_notes": "Uses public result composition and app metadata only."
+    },
+    {
+      "id": "keyword_opportunity_score",
+      "area": "keyword_intelligence",
+      "name": "Keyword Opportunity Score",
+      "status": "planned",
+      "priority": "P1",
+      "sources": ["google_play_public_search", "google_play_public_store", "local_modeled_estimates"],
+      "properties": ["opportunity", "volume_estimate", "difficulty", "relevancy", "current_rank", "competitor_gap", "confidence"],
+      "logic": ["weighted_opportunity_formula", "rank_gap_analysis", "relevancy_adjustment", "confidence_penalty"],
+      "free_legal_notes": "Must explain formula and estimate status."
+    },
+    {
+      "id": "semantic_relevancy_score",
+      "area": "keyword_intelligence",
+      "name": "Semantic Relevancy Score",
+      "status": "planned",
+      "priority": "P1",
+      "sources": ["google_play_public_store", "google_play_reviews_public_store", "local_modeled_estimates"],
+      "properties": ["keyword", "app_metadata_match", "review_language_match", "category_match", "confidence"],
+      "logic": ["token_similarity", "phrase_overlap", "category_alignment", "review_topic_overlap"],
+      "free_legal_notes": "Local model only. No paid AI/API dependency required."
+    },
+    {
+      "id": "share_of_voice",
+      "area": "keyword_intelligence",
+      "name": "Share Of Voice",
+      "status": "planned",
+      "priority": "P1",
+      "sources": ["google_play_public_search", "local_modeled_estimates"],
+      "properties": ["keyword_group", "target_visibility", "competitor_visibility", "country", "language", "confidence"],
+      "logic": ["rank_weighted_visibility", "competitor_set_aggregation", "keyword_group_weighting"],
+      "free_legal_notes": "Uses rank snapshots, not proprietary traffic claims."
+    },
+    {
+      "id": "competitor_watchlists",
+      "area": "competitor_intelligence",
+      "name": "Competitor Watchlists",
+      "status": "planned",
+      "priority": "P0",
+      "sources": ["google_play_public_store", "google_play_public_search", "apple_itunes_lookup_api"],
+      "properties": ["workspace", "target_app", "competitor_apps", "countries", "keyword_groups", "notes"],
+      "logic": ["workspace_config", "competitor_grouping", "tracked_market_scope"],
+      "free_legal_notes": "Tracks public identifiers and user-supplied competitor choices."
+    },
+    {
+      "id": "ranking_based_keyword_gap",
+      "area": "competitor_intelligence",
+      "name": "Ranking-Based Keyword Gap",
+      "status": "planned",
+      "priority": "P0",
+      "sources": ["google_play_public_search"],
+      "properties": ["keyword", "target_position", "competitor_positions", "gap_type", "priority"],
+      "logic": ["shared_rank_comparison", "missing_rank_detection", "competitor_winner_detection"],
+      "free_legal_notes": "Uses low-volume public rank checks."
+    },
+    {
+      "id": "competitor_metadata_timeline",
+      "area": "competitor_intelligence",
+      "name": "Competitor Metadata Timeline",
+      "status": "planned",
+      "priority": "P1",
+      "sources": ["google_play_public_store", "apple_itunes_lookup_api"],
+      "properties": ["title_changes", "summary_changes", "description_changes", "version_changes", "change_date", "diff"],
+      "logic": ["snapshot_diff", "field_change_detection", "timeline_annotation"],
+      "free_legal_notes": "Stores metadata diffs and minimal snapshots needed for analysis."
+    },
+    {
+      "id": "creative_timeline",
+      "area": "creative_analysis",
+      "name": "Creative Timeline",
+      "status": "planned",
+      "priority": "P2",
+      "sources": ["google_play_public_store", "apple_itunes_lookup_api"],
+      "properties": ["icon_url", "screenshot_urls", "video_url", "asset_hash", "change_date"],
+      "logic": ["asset_reference_tracking", "hash_comparison", "minimal_snapshot_policy"],
+      "free_legal_notes": "Store public asset references and hashes; avoid bulk asset mirroring."
+    },
+    {
+      "id": "screenshot_ocr_analysis",
+      "area": "creative_analysis",
+      "name": "Screenshot OCR And Message Analysis",
+      "status": "planned",
+      "priority": "P2",
+      "sources": ["google_play_public_store", "apple_itunes_lookup_api", "local_modeled_estimates"],
+      "properties": ["detected_text", "keyword_presence", "message_density", "language", "confidence"],
+      "logic": ["local_ocr_optional", "keyword_presence_check", "message_density_score"],
+      "free_legal_notes": "Use local OCR libraries only. Store extracted text and evidence, not copied assets where avoidable."
+    },
+    {
+      "id": "review_intelligence",
+      "area": "review_intelligence",
+      "name": "Review Sentiment And Topic Intelligence",
+      "status": "planned",
+      "priority": "P0",
+      "sources": ["google_play_reviews_public_store", "user_imported_console_exports", "local_modeled_estimates"],
+      "properties": ["sentiment", "topics", "complaints", "praise", "feature_requests", "rating_drivers", "country", "language"],
+      "logic": ["sentiment_score", "topic_clustering", "complaint_frequency", "feature_request_extraction"],
+      "free_legal_notes": "Analyze limited public samples or user-owned exports. Do not bulk mirror review text."
+    },
+    {
+      "id": "metadata_audit_core",
+      "area": "metadata_optimization",
+      "name": "Typed Metadata Audit Core",
+      "status": "planned",
+      "priority": "P0",
+      "sources": ["google_play_public_store", "apple_itunes_lookup_api", "local_modeled_estimates"],
+      "properties": ["title_score", "short_description_score", "long_description_score", "keyword_coverage", "field_limits", "recommendations"],
+      "logic": ["store_limit_rules", "keyword_placement_weighting", "semantic_coverage", "issue_prioritization"],
+      "free_legal_notes": "Uses public metadata and local rules."
+    },
+    {
+      "id": "metadata_experiment_log",
+      "area": "metadata_optimization",
+      "name": "Metadata Experiment Log",
+      "status": "planned",
+      "priority": "P1",
+      "sources": ["user_imported_console_exports", "google_play_public_search", "local_modeled_estimates"],
+      "properties": ["change_date", "changed_fields", "hypothesis", "before_rank", "after_rank", "impact_estimate"],
+      "logic": ["before_after_window", "rank_delta_attribution", "confidence_downgrade_for_correlation"],
+      "free_legal_notes": "Must label impact as correlation unless user imports official performance data."
+    },
+    {
+      "id": "download_estimates",
+      "area": "market_intelligence",
+      "name": "Download Estimates",
+      "status": "blocked",
+      "priority": "P2",
+      "sources": ["user_imported_console_exports", "local_modeled_estimates"],
+      "properties": ["estimated_downloads", "method", "confidence", "time_window", "country"],
+      "logic": ["owner_import_passthrough", "public_signal_model", "confidence_band"],
+      "free_legal_notes": "Exact competitor downloads are not available from free public sources. Only user imports or labeled estimates are allowed."
+    },
+    {
+      "id": "revenue_estimates",
+      "area": "market_intelligence",
+      "name": "Revenue Estimates",
+      "status": "blocked",
+      "priority": "P3",
+      "sources": ["user_imported_console_exports", "local_modeled_estimates"],
+      "properties": ["estimated_revenue", "method", "confidence", "time_window", "country"],
+      "logic": ["owner_import_passthrough", "limited_public_proxy_model", "confidence_band"],
+      "free_legal_notes": "Exact competitor revenue requires proprietary or paid data. Keep blocked until a free/legal owner-provided or public method exists."
+    },
+    {
+      "id": "localization_audit",
+      "area": "localization",
+      "name": "Localization Audit",
+      "status": "planned",
+      "priority": "P1",
+      "sources": ["google_play_public_store", "apple_itunes_lookup_api", "google_play_public_search"],
+      "properties": ["country", "language", "metadata_available", "local_keyword_rank", "local_competitors", "missing_fields"],
+      "logic": ["country_locale_matrix", "metadata_completeness", "localized_rank_check"],
+      "free_legal_notes": "Uses public per-country metadata and low-volume public search snapshots."
+    },
+    {
+      "id": "ios_app_store_support",
+      "area": "platform_coverage",
+      "name": "Apple App Store Support",
+      "status": "planned",
+      "priority": "P1",
+      "sources": ["apple_itunes_lookup_api"],
+      "properties": ["bundle_id", "track_id", "title", "subtitle", "description", "rating", "screenshots", "genres"],
+      "logic": ["itunes_lookup_adapter", "ios_metadata_normalization", "ios_contract_mapping"],
+      "free_legal_notes": "Use Apple's public API with caching. Avoid bulk asset storage."
+    },
+    {
+      "id": "alerts_monitoring",
+      "area": "automation",
+      "name": "Alerts And Monitoring",
+      "status": "planned",
+      "priority": "P1",
+      "sources": ["google_play_public_store", "google_play_public_search", "apple_itunes_lookup_api", "user_imported_console_exports"],
+      "properties": ["alert_type", "threshold", "triggered_at", "severity", "evidence", "destination"],
+      "logic": ["rank_drop_alert", "metadata_change_alert", "rating_drop_alert", "source_failure_alert"],
+      "free_legal_notes": "Local alerts only by default. External destinations require user configuration."
+    },
+    {
+      "id": "reporting_exports",
+      "area": "reporting",
+      "name": "Reports And Exports",
+      "status": "planned",
+      "priority": "P0",
+      "sources": ["local_modeled_estimates", "user_imported_console_exports", "google_play_public_store", "google_play_public_search"],
+      "properties": ["json", "csv", "xlsx", "pdf", "summary", "source_evidence", "confidence"],
+      "logic": ["contract_export", "csv_flattening", "executive_summary", "source_disclaimer"],
+      "free_legal_notes": "Exports must include source and estimate disclaimers."
+    },
+    {
+      "id": "source_health_monitor",
+      "area": "governance",
+      "name": "Source Health Monitor",
+      "status": "planned",
+      "priority": "P0",
+      "sources": ["google_play_public_store", "google_play_public_search", "apple_itunes_lookup_api", "google_play_reviews_public_store"],
+      "properties": ["source_id", "last_success", "last_failure", "failure_reason", "policy_status", "enabled"],
+      "logic": ["provider_probe", "failure_classification", "policy_gate_report"],
+      "free_legal_notes": "Never probes blocked or review-required sources without explicit operator action."
+    },
+    {
+      "id": "workspace_system",
+      "area": "workflow",
+      "name": "Workspace System",
+      "status": "planned",
+      "priority": "P0",
+      "sources": ["local_modeled_estimates"],
+      "properties": ["tracked_apps", "competitors", "keyword_groups", "countries", "notes", "experiments"],
+      "logic": ["workspace_config", "project_state", "default_market_scope"],
+      "free_legal_notes": "Local configuration only."
+    }
+  ]
+}

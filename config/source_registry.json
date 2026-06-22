@@ -1,0 +1,108 @@
+{
+  "sources": [
+    {
+      "source_id": "google_play_public_store",
+      "display_name": "Google Play Public Store",
+      "purpose": "Fetch public app metadata and rating aggregates for single-app inspection",
+      "cost": "free",
+      "auth": "none",
+      "legal_notes": "Use only public app listing data through standard public access patterns. No authenticated access, bypass, or anti-bot evasion is permitted.",
+      "compliance_status": "approved",
+      "rate_limit": "Throttle interactive requests and prefer cached responses for repeated analysis.",
+      "cache_ttl_minutes": 60,
+      "enabled": true,
+      "fallback_behavior": "Return structured warnings when unavailable and surface stale cache if present."
+    },
+    {
+      "source_id": "google_play_public_search",
+      "display_name": "Google Play Public Search",
+      "purpose": "Check public Google Play search result positions for low-volume keyword rank tracking",
+      "cost": "free",
+      "auth": "none",
+      "legal_notes": "Use only public search result data through standard public access patterns. Keep query volume low, do not bypass blocks, and do not automate high-frequency polling.",
+      "compliance_status": "approved",
+      "rate_limit": "Limit interactive checks, cache repeated keyword/country requests, and schedule future monitoring conservatively.",
+      "cache_ttl_minutes": 60,
+      "enabled": true,
+      "fallback_behavior": "Return structured warnings when search is unavailable, blocked, or incomplete."
+    },
+    {
+      "source_id": "google_play_reviews_public_store",
+      "display_name": "Google Play Public Reviews",
+      "purpose": "Fetch public review samples for later keyword and sentiment analysis",
+      "cost": "free",
+      "auth": "none",
+      "legal_notes": "Use only publicly visible review data needed for analysis. Do not mirror bulk review content beyond the minimum required.",
+      "compliance_status": "approved",
+      "rate_limit": "Use low-volume batched fetches with caching and manual review if behavior changes.",
+      "cache_ttl_minutes": 120,
+      "enabled": true,
+      "fallback_behavior": "Skip review enrichment and emit warnings when unavailable."
+    },
+    {
+      "source_id": "local_category_taxonomy",
+      "display_name": "Local Category Taxonomy",
+      "purpose": "Generate category-based keyword seeds from curated local open-source taxonomy data",
+      "cost": "free",
+      "auth": "none",
+      "legal_notes": "Local curated taxonomy only. No scraping, paid data, authentication, or third-party request is used.",
+      "compliance_status": "approved",
+      "rate_limit": "Local computation only.",
+      "cache_ttl_minutes": 0,
+      "enabled": true,
+      "fallback_behavior": "Fall back to user-provided keyword seeds when a category is unknown."
+    },
+    {
+      "source_id": "apple_itunes_lookup_api",
+      "display_name": "Apple iTunes Lookup API",
+      "purpose": "Fetch public App Store metadata for iOS and Mac apps through Apple's public lookup/search API",
+      "cost": "free",
+      "auth": "none",
+      "legal_notes": "Use Apple's public iTunes Search/Lookup API for metadata lookup with caching and attribution-aware usage. Do not bulk mirror assets or exceed reasonable request volume.",
+      "compliance_status": "approved",
+      "rate_limit": "Cache lookup/search responses and keep request volume low for interactive and scheduled checks.",
+      "cache_ttl_minutes": 1440,
+      "enabled": true,
+      "fallback_behavior": "Return structured warnings when Apple lookup is unavailable and continue Android-only workflows."
+    },
+    {
+      "source_id": "user_imported_console_exports",
+      "display_name": "User Imported Console Exports",
+      "purpose": "Analyze CSV/JSON exports that the app owner provides from their own developer, ads, analytics, or MMP accounts",
+      "cost": "free",
+      "auth": "none",
+      "legal_notes": "Use only files explicitly supplied by the user from accounts they control or are authorized to analyze. Never request or store account credentials.",
+      "compliance_status": "approved",
+      "rate_limit": "Local file processing only; no external request volume.",
+      "cache_ttl_minutes": 0,
+      "enabled": true,
+      "fallback_behavior": "Skip import-backed metrics when files are missing and surface import-required warnings."
+    },
+    {
+      "source_id": "local_modeled_estimates",
+      "display_name": "Local Modeled Estimates",
+      "purpose": "Generate clearly labeled estimates from approved public observations and user-provided imports",
+      "cost": "free",
+      "auth": "none",
+      "legal_notes": "Models must use only approved source data, local history, or user-provided files. Outputs must be labeled as estimates with confidence and method.",
+      "compliance_status": "approved",
+      "rate_limit": "Local computation only.",
+      "cache_ttl_minutes": 0,
+      "enabled": true,
+      "fallback_behavior": "Return unavailable estimate warnings when required inputs are missing."
+    },
+    {
+      "source_id": "google_trends_public",
+      "display_name": "Google Trends Public",
+      "purpose": "Fetch public trend signals for keywords",
+      "cost": "free",
+      "auth": "none",
+      "legal_notes": "Use only public trend interfaces. Disable immediately if usage terms or technical access become uncertain.",
+      "compliance_status": "review_required",
+      "rate_limit": "Keep volume low, use caching, and avoid automated high-frequency polling.",
+      "cache_ttl_minutes": 180,
+      "enabled": false,
+      "fallback_behavior": "Return trend-unavailable warnings and continue without trend enrichment."
+    }
+  ]
+}

@@ -1,0 +1,45 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+
+# Virtual environments
+.venv/
+venv/
+env/
+
+# Local runtime data
+cache/
+reports/
+data/
+memory/
+*.log
+*.tmp
+
+# Local secrets and machine config
+.env
+.env.*
+!.env.example
+
+# Vendored external toolkit. Generated project-local spec artifacts are kept in
+# .specify/ and specs/.
+spec-kit/
+
+# Accidental generated folder from earlier shell usage
+{core,data,reports,cache}/
+
+# OS/editor
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+
+# Build / PyPI distribution artifacts
+dist/
+build/
+*.egg-info/
+*.egg
+MANIFEST

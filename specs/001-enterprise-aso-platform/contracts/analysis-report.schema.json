@@ -1,0 +1,106 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://aso-pro.local/contracts/analysis-report.schema.json",
+  "title": "AnalysisReport",
+  "type": "object",
+  "required": [
+    "request_context",
+    "app",
+    "evidence",
+    "scores",
+    "insights",
+    "warnings",
+    "confidence"
+  ],
+  "properties": {
+    "request_context": {
+      "type": "object",
+      "required": [
+        "package_id",
+        "lang",
+        "country",
+        "requested_at",
+        "sources"
+      ],
+      "properties": {
+        "package_id": { "type": "string" },
+        "lang": { "type": "string" },
+        "country": { "type": "string" },
+        "requested_at": { "type": "string" },
+        "sources": {
+          "type": "array",
+          "items": { "type": "string" }
+        }
+      }
+    },
+    "app": {
+      "type": "object",
+      "required": [
+        "package_id",
+        "title",
+        "score",
+        "ratings",
+        "reviews",
+        "installs",
+        "histogram"
+      ]
+    },
+    "evidence": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "source_id",
+          "display_name",
+          "scope",
+          "fetched_at",
+          "from_cache",
+          "locale",
+          "country"
+        ]
+      }
+    },
+    "scores": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "name",
+          "value",
+          "scale",
+          "formula_version",
+          "explanation"
+        ]
+      }
+    },
+    "insights": {
+      "type": "array",
+      "items": { "type": "string" }
+    },
+    "warnings": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "code",
+          "severity",
+          "message",
+          "source_id"
+        ]
+      }
+    },
+    "confidence": {
+      "type": "object",
+      "required": [
+        "label",
+        "score",
+        "rationale"
+      ],
+      "properties": {
+        "label": { "type": "string" },
+        "score": { "type": "integer" },
+        "rationale": { "type": "string" }
+      }
+    }
+  }
+}

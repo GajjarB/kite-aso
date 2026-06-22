@@ -1,0 +1,122 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>ASO PRO Console</title>
+    <link rel="stylesheet" href="/static/app.css">
+  </head>
+  <body>
+    <div class="app-shell">
+      <aside class="rail">
+        <div class="brand">
+          <div class="mark">A</div>
+          <div>
+            <strong>ASO PRO</strong>
+            <span>Growth console</span>
+          </div>
+        </div>
+        <nav>
+          <button class="nav active" data-view="overview">Overview</button>
+          <button class="nav" data-view="projects">Projects</button>
+          <button class="nav" data-view="analysis">Analysis</button>
+          <button class="nav" data-view="sources">Sources</button>
+        </nav>
+      </aside>
+
+      <main>
+        <header class="topbar">
+          <div>
+            <h1>ASO Intelligence Console</h1>
+            <p>Track apps, run baseline audits, score keywords, and monitor public-source readiness.</p>
+          </div>
+          <form id="signin-form" class="signin">
+            <input id="email" type="email" placeholder="you@company.com" autocomplete="email" required>
+            <input id="workspace-name" type="text" placeholder="Workspace" autocomplete="organization">
+            <button type="submit">Send Link</button>
+          </form>
+          <button id="logout" class="secondary hidden">Logout</button>
+        </header>
+
+        <section id="status" class="notice hidden"></section>
+
+        <section id="overview" class="view active">
+          <div class="metric-grid">
+            <div class="metric">
+              <span>Projects</span>
+              <strong id="metric-projects">0</strong>
+            </div>
+            <div class="metric">
+              <span>Analyses</span>
+              <strong id="metric-analyses">0</strong>
+            </div>
+            <div class="metric">
+              <span>Ready Sources</span>
+              <strong id="metric-sources">0/0</strong>
+            </div>
+            <div class="metric">
+              <span>Policy</span>
+              <strong>Free/legal</strong>
+            </div>
+          </div>
+          <section id="action-plan" class="action-plan empty">Create a project to generate an ASO action plan.</section>
+
+          <div class="split">
+            <section>
+              <div class="section-head">
+                <h2>Recent Analyses</h2>
+                <button id="refresh">Refresh</button>
+              </div>
+              <div id="recent-analyses" class="list empty">No analyses yet.</div>
+            </section>
+            <section>
+              <h2>Fast Keyword Score</h2>
+              <form id="keyword-form" class="stacked">
+                <textarea id="keyword-list" placeholder="bmi calculator, loan calculator"></textarea>
+                <textarea id="app-text" placeholder="Paste title, summary, or positioning text"></textarea>
+                <button type="submit">Score Keywords</button>
+              </form>
+            </section>
+          </div>
+        </section>
+
+        <section id="projects" class="view">
+          <div class="section-head">
+            <h2>Projects</h2>
+          </div>
+          <form id="project-form" class="project-form">
+            <input id="project-name" placeholder="Project name" required>
+            <input id="package-id" placeholder="com.example.app" required>
+            <input id="category" placeholder="Category, e.g. tools">
+            <input id="seed-text" placeholder="Seed keywords">
+            <input id="market" placeholder="Market, e.g. en-us">
+            <input id="competitors" placeholder="Competitors, comma-separated">
+            <button type="submit">Create Project</button>
+          </form>
+          <div id="project-list" class="table"></div>
+        </section>
+
+        <section id="analysis" class="view">
+          <div class="section-head">
+            <h2>Run Analysis</h2>
+          </div>
+          <div class="analysis-actions">
+            <select id="project-select"></select>
+            <button id="run-baseline">Run Baseline</button>
+            <button id="run-metadata">Metadata Audit</button>
+          </div>
+          <pre id="analysis-output" class="output">Select a project and run an analysis.</pre>
+          <div id="report-links" class="report-links hidden"></div>
+        </section>
+
+        <section id="sources" class="view">
+          <div class="section-head">
+            <h2>Source Governance</h2>
+          </div>
+          <div id="source-list" class="table"></div>
+        </section>
+      </main>
+    </div>
+    <script src="/static/app.js"></script>
+  </body>
+</html>

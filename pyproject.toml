@@ -1,0 +1,59 @@
+[build-system]
+requires = ["setuptools>=69", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "kite-aso"
+version = "1.0.0"
+description = "Kite — a keyboard-first ASO intelligence platform with a hybrid CLI and TUI workspace."
+readme = "README.md"
+requires-python = ">=3.11"
+license = { text = "MIT" }
+keywords = ["aso", "app-store-optimization", "cli", "tui", "keywords", "google-play", "mobile"]
+classifiers = [
+  "Development Status :: 4 - Beta",
+  "Environment :: Console",
+  "Intended Audience :: Developers",
+  "License :: OSI Approved :: MIT License",
+  "Operating System :: OS Independent",
+  "Programming Language :: Python :: 3",
+  "Programming Language :: Python :: 3.11",
+  "Programming Language :: Python :: 3.12",
+  "Topic :: Terminals",
+  "Topic :: Software Development :: Libraries :: Application Frameworks",
+]
+dependencies = [
+  "google-play-scraper>=1.2.4",
+  "pytrends>=4.9.2",
+  "rich>=13.7.0",
+  "textblob>=0.17.1",
+  "nltk>=3.8.1",
+  "requests>=2.31.0",
+  "textual>=0.61.0",
+  "fastapi>=0.111.0",
+  "uvicorn>=0.30.0",
+]
+
+[project.optional-dependencies]
+dev = [
+  "pytest>=8.2.0",
+  "build",
+  "twine",
+]
+
+[project.urls]
+Homepage = "https://github.com/GajjarB/kite-aso"
+Repository = "https://github.com/GajjarB/kite-aso"
+"Bug Tracker" = "https://github.com/GajjarB/kite-aso/issues"
+
+[project.scripts]
+terminalcore = "src.terminalcore.cli.index:main"
+tc = "src.terminalcore.cli.index:main"
+kite = "src.terminalcore.cli.index:main"
+aso-saas = "src.aso_platform.saas_app:main"
+
+[tool.setuptools.packages.find]
+include = ["src*"]
+
+[tool.setuptools.package-data]
+"*" = ["*.json", "*.md", "*.txt", "*.yaml", "*.yml"]

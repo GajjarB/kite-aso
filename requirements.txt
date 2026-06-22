@@ -1,0 +1,10 @@
+google-play-scraper>=1.2.4
+pytrends>=4.9.2
+rich>=13.7.0
+textblob>=0.17.1
+nltk>=3.8.1
+requests>=2.31.0
+pytest>=8.2.0
+textual>=0.61.0
+fastapi>=0.111.0
+uvicorn>=0.30.0

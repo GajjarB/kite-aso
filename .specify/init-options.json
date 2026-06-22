@@ -1,0 +1,5 @@
+{
+  "integration": "codex",
+  "script": "ps",
+  "branch_numbering": "sequential"
+}
