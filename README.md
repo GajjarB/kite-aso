@@ -1,12 +1,14 @@
 <div align="center">
 
-```
+```ansi
+
 ██╗  ██╗██╗████████╗███████╗
 ██║ ██╔╝██║╚══██╔══╝██╔════╝
-█████╔╝ ██║   ██║   █████╗
-██╔═██╗ ██║   ██║   ██╔══╝
+█████╔╝ ██║   ██║   █████╗  
+██╔═██╗ ██║   ██║   ██╔══╝  
 ██║  ██╗██║   ██║   ███████╗
 ╚═╝  ╚═╝╚═╝   ╚═╝   ╚══════╝
+
 ```
 
 **Kite ASO** — a keyboard-first App Store Optimization platform with a hybrid CLI and TUI workspace.
