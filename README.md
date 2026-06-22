@@ -1,351 +1,213 @@
-```ansi
+<div align="center">
 
+```
 ██╗  ██╗██╗████████╗███████╗
 ██║ ██╔╝██║╚══██╔══╝██╔════╝
-█████╔╝ ██║   ██║   █████╗  
-██╔═██╗ ██║   ██║   ██╔══╝  
+█████╔╝ ██║   ██║   █████╗
+██╔═██╗ ██║   ██║   ██╔══╝
 ██║  ██╗██║   ██║   ███████╗
 ╚═╝  ╚═╝╚═╝   ╚═╝   ╚══════╝
-
 ```
 
-Formerly ASO PRO.
+**Kite ASO** — a keyboard-first App Store Optimization platform with a full hybrid CLI + TUI workspace.
 
-Kite now ships with **TerminalCore**, a premium hybrid CLI + TUI control plane for terminal-first workflows.
+[![PyPI version](https://img.shields.io/pypi/v/kite-aso?color=%23D97745&style=flat-square)](https://pypi.org/project/kite-aso/)
+[![Python](https://img.shields.io/pypi/pyversions/kite-aso?style=flat-square)](https://pypi.org/project/kite-aso/)
+[![License: MIT](https://img.shields.io/badge/license-MIT-brightgreen?style=flat-square)](LICENSE)
+[![GitHub](https://img.shields.io/badge/github-GajjarB%2Fkite--aso-181717?style=flat-square&logo=github)](https://github.com/GajjarB/kite-aso)
 
-The repo still contains the ASO platform code under `src/aso_platform/`, but it now also includes a reusable Python-native terminal shell that can power:
+</div>
 
-- setup and onboarding flows
-- environment-aware status checks
-- log browsing
-- task execution
-- settings management
-- full-screen keyboard-driven dashboards
+---
 
-This shell is generic by design, so the UI/UX and architecture are production-grade even when the underlying business logic is demo data.
-
-## Why Python Instead Of Node
-
-The original project already used a Python terminal stack, so TerminalCore was implemented natively in Python instead of forcing a new TypeScript runtime into the repo.
-
-The result:
-
-- `argparse + Rich` for clean command output
-- `Textual` for the full-screen TUI
-- reusable config and adapter layers
-- console entrypoints for `terminalcore` and `tc`
-
-## Features
-
-### TerminalCore Shell
-
-- direct CLI commands for power users
-- interactive first-run setup wizard
-- full-screen responsive dashboard
-- warm Claude-inspired palette
-- keyboard-first navigation
-- clean config system under `~/.terminalcore/config.json`
-- doctor checks
-- logs, tasks, settings, and help screens
-- reusable adapter layer for swapping in real backend logic later
-
-### Existing Kite Platform
-
-- app inspection by package ID
-- keyword discovery from category + seed text
-- keyword rank snapshots
-- governed free/legal source registry
-- workspace-based ASO baseline flow
-
-## Installation
-
-Install Python dependencies:
+## ⚡ Install in one command
 
 ```bash
-pip install -r requirements.txt
+pip install kite-aso
 ```
 
-Optional: install local console entrypoints so `terminalcore` and `tc` work directly:
+That's it. No cloning, no setup scripts, no config files needed.
+
+> **Requires Python 3.11+**  
+> Check your version: `python --version`
+
+---
+
+## 🚀 Quick Start
 
 ```bash
-pip install -e .
+kite            # open the full-screen TUI dashboard
+kite init       # first-time setup wizard
+kite status     # health check
+kite doctor     # diagnose any issues
 ```
 
-## Quick Start
+---
 
-### TerminalCore
+## ✨ Features
 
-First run:
+### 🖥️ Terminal Dashboard (TUI)
+- Full-screen keyboard-driven interface
+- Projects, tasks, logs, and settings screens
+- Warm dark theme — easy on the eyes
+- Works on any terminal (macOS, Linux, Windows)
+
+### 🔍 ASO Intelligence
+- **App inspection** — analyse any app by Google Play package ID
+- **Keyword discovery** — find high-value keywords by category and seed text
+- **Keyword ranking** — snapshot and track keyword positions over time
+- **Competitor analysis** — gap analysis against your rivals
+- **Metadata auditing** — score your title, description, and keyword field
+- **Review analysis** — sentiment and topic extraction from user reviews
+- **Localisation audit** — compare keyword performance across markets
+- **iOS support** — inspect Apple App Store listings too
+
+### 🌐 Local Web Console
+- SaaS-style browser dashboard at `http://127.0.0.1:8787`
+- Workspace and project management
+- Saved analysis history
+- Source-governance status
+
+---
+
+## 📖 Command Reference
+
+### Dashboard & Shell
+
+| Command | Description |
+|---|---|
+| `kite` | Open the full-screen TUI dashboard |
+| `kite init` | Run the first-time setup wizard |
+| `kite dashboard` | Alias — open TUI directly |
+| `kite status` | Print a health summary |
+| `kite run` | Execute the primary task |
+| `kite doctor` | Run environment and config checks |
+| `kite help` | Show all commands |
+
+### Logs
+
+| Command | Description |
+|---|---|
+| `kite logs` | Show recent logs |
+| `kite logs --tail` | Follow live log output |
+| `kite logs --level error` | Filter by level (`info` `success` `warning` `error`) |
+
+### Config
+
+| Command | Description |
+|---|---|
+| `kite config list` | Show all config values |
+| `kite config get <key>` | Get one config value |
+| `kite config set <key> <value>` | Set a config value |
+| `kite config reset` | Reset config to defaults |
+
+### ASO Commands
 
 ```bash
-python terminalcore.py
+# Keyword discovery
+kite keywords build --category tools --seed "bmi calculator"
+kite keywords score "bmi calculator,loan calculator" --app-text "calculator finance"
+
+# App inspection
+kite inspect com.example.app
+kite ios inspect com.example.ios --country us
+
+# Rank tracking
+kite rank history "calculator" com.example.app
+kite rank delta "calculator" com.example.app
+
+# Competitor analysis
+kite competitors add my-workspace com.comp.one,com.comp.two
+kite competitors gap my-workspace
+kite share-of-voice "calculator,bmi" com.example.app --competitors com.comp.one
+
+# Metadata & reviews
+kite audit metadata com.example.app --keywords "calculator,bmi"
+kite reviews analyze com.example.app --count 50
+kite localization audit com.example.app --markets en-us,en-gb --keywords calculator
+
+# Reports & alerts
+kite reports export my-workspace --file report.md --export-format md
+kite alerts check "calculator" com.example.app
+kite sources health
 ```
 
-Or, after editable install:
+### Web Console
 
 ```bash
-terminalcore
+kite saas --port 8787
+# then open: http://127.0.0.1:8787
 ```
 
-Run the setup wizard directly:
+---
 
-```bash
-terminalcore init
-```
+## ⌨️ TUI Keyboard Shortcuts
 
-Open the dashboard:
+| Key | Action |
+|---|---|
+| `↑` `↓` or `j` `k` | Navigate sidebar |
+| `Enter` or `→` | Open selected section |
+| `←` | Return to dashboard |
+| `/` | Focus search |
+| `?` | Open help screen |
+| `r` | Refresh current screen |
+| `d` | Run primary action |
+| `l` | Open logs |
+| `s` | Open settings |
+| `Esc` | Close modal / go back |
+| `q` or `Ctrl+C` | Quit |
 
-```bash
-terminalcore dashboard
-```
+---
 
-Check status:
+## ⚙️ Config
 
-```bash
-terminalcore status
-```
-
-Run doctor:
-
-```bash
-terminalcore doctor
-```
-
-### Existing ASO Commands
-
-```bash
-python aso.py
-python -m src.aso_platform.cli doctor
-python -m src.aso_platform.cli keywords --category tools --seed "bmi calculator"
-python -m src.aso_platform.cli workspace baseline calc-lab
-```
-
-Expanded local ASO intelligence commands:
-
-```bash
-python -m src.aso_platform.cli keywords build --category tools --seed "bmi calculator"
-python -m src.aso_platform.cli keywords score "bmi calculator,loan calculator" --app-text "calculator finance tools"
-python -m src.aso_platform.cli rank history "calculator" com.example.app
-python -m src.aso_platform.cli rank delta "calculator" com.example.app
-python -m src.aso_platform.cli share-of-voice "calculator,bmi calculator" com.example.app --competitors com.comp.one
-python -m src.aso_platform.cli competitors add calc-lab com.comp.one,com.comp.two
-python -m src.aso_platform.cli competitors gap calc-lab
-python -m src.aso_platform.cli audit metadata com.example.app --keywords "calculator,bmi"
-python -m src.aso_platform.cli reviews analyze com.example.app --count 50
-python -m src.aso_platform.cli localization audit com.example.app --markets en-us,en-gb --keywords calculator
-python -m src.aso_platform.cli ios inspect com.example.ios --country us
-python -m src.aso_platform.cli reports export calc-lab --file reports/calc-lab.md --export-format md
-python -m src.aso_platform.cli alerts check "calculator" com.example.app
-python -m src.aso_platform.cli sources health
-```
-
-### SaaS MVP Web Console
-
-Run the local SaaS-style dashboard:
-
-```bash
-python -m src.aso_platform.cli saas --port 8787
-```
-
-Open:
-
-```text
-http://127.0.0.1:8787
-```
-
-The web console provides local account/workspace creation, project tracking, baseline analysis, metadata audits, keyword scoring, saved analysis history, and source-governance status. Data is stored locally in `data/aso_saas.sqlite3`.
-
-## Command Reference
-
-### TerminalCore
-
-```bash
-terminalcore
-terminalcore init
-terminalcore dashboard
-terminalcore status
-terminalcore run
-terminalcore logs
-terminalcore logs --tail
-terminalcore logs --level error
-terminalcore config list
-terminalcore config get theme
-terminalcore config set environment staging
-terminalcore config reset
-terminalcore doctor
-terminalcore help
-```
-
-### Command Behavior
-
-- `terminalcore`: opens the dashboard, and launches first-run setup when config is missing.
-- `terminalcore init`: guided setup wizard.
-- `terminalcore dashboard`: full-screen TUI.
-- `terminalcore status`: clean CLI health summary.
-- `terminalcore run`: demo task run with progress.
-- `terminalcore logs`: filtered or tail logs.
-- `terminalcore config`: inspect or mutate config.
-- `terminalcore doctor`: environment and config checks.
-- `terminalcore help`: command reference.
-
-## TUI Navigation
-
-Keyboard bindings:
-
-- `q` quit
-- `Ctrl+C` quit safely
-- `Enter` open selected section
-- `↑↓` or `j/k` move through the sidebar
-- `←` return to dashboard
-- `→` open selected section
-- `/` focus search when available
-- `?` open help
-- `r` refresh current screen
-- `d` run the primary action
-- `l` open logs
-- `s` open settings
-- `Esc` close modal or return
-
-## Theme
-
-TerminalCore uses a warm terminal palette centered around:
-
-- background `#1E1A17`
-- surfaces `#2A241F`, `#332B25`, `#3B322B`
-- primary text `#F4EFE7`
-- muted text `#8F8175`
-- accent `#D97745`
-- success `#7FA66A`
-- warning `#D0A24C`
-- error `#C7655A`
-- info `#7DA7C7`
-
-If true color is unavailable, the shell degrades gracefully to the terminal's supported palette.
-
-## Config
-
-Location:
-
-```text
-~/.terminalcore/config.json
-```
-
-Example:
+Config is stored at `~/.terminalcore/config.json` and created automatically on first run.
 
 ```json
 {
-  "workspaceName": "TerminalCore",
+  "workspaceName": "Kite",
   "environment": "development",
   "theme": "claude-warm",
-  "demoData": true,
-  "createdAt": "2026-05-16T00:00:00+00:00",
   "version": "1.0.0"
 }
 ```
 
-If the config is missing or invalid:
-
-- first-run opens the setup wizard
-- CLI commands show friendly errors
-- `terminalcore doctor` and `terminalcore config reset` are suggested fixes
-
-## Text Mockups
-
-### Dashboard
-
-```text
-+- TerminalCore --------------------------------------------------------------+
-| TerminalCore    Env Development    Version 1.0.0    Status Running         |
-+----------------------+------------------------------------------------------+
-| Navigate             | Overview                                             |
-| > Dashboard          | +-----------+ +-----------+ +----------------------+ |
-|   Projects           | | Status    | | Env       | | Health               | |
-|   Tasks              | | Running   | | Dev       | | 4/4 checks passed    | |
-|   Logs               | +-----------+ +-----------+ +----------------------+ |
-|   Settings           | Recent Activity                                      |
-|   Help               | Workspace loaded successfully                        |
-+----------------------+------------------------------------------------------+
-| Overview loaded.                                                        |
-| ↑↓ Navigate   Enter Select   / Search   ? Help   q Quit                |
-+-------------------------------------------------------------------------+
-```
-
-### Status
-
-```text
-TerminalCore Status
-
-System       Running
-Environment  Development
-Version      1.0.0
-Config       Valid
-Last Check   Just now
-```
-
-## Folder Structure
-
-```text
-src/
-  aso_platform/
-  terminalcore/
-    cli/
-      commands/
-    core/
-      adapters/
-      config/
-      services/
-    tui/
-      components/
-      screens/
-      theme/
-    utils/
-    wizard/
-tests/
-  contract/
-  unit/
-terminalcore.py
-tc.py
-pyproject.toml
-```
-
-## Development
-
-Run tests:
+Reset to defaults at any time:
 
 ```bash
-python -m unittest discover -s tests -p "test_*.py"
+kite config reset
 ```
 
-Compile key modules:
+---
+
+## 🛡️ Data Policy
+
+Kite uses **public data only**:
+
+- No login bypass, paywall bypass, or CAPTCHA circumvention
+- No anti-bot evasion tactics
+- Uncertain or legally grey sources are **disabled**, not silently used
+
+Source rules live in `config/source_registry.json`.
+
+---
+
+## 🤝 Contributing
+
+Contributions are welcome! See [CONTRIBUTING.md](CONTRIBUTING.md) for guidelines.
 
 ```bash
-python -m py_compile terminalcore.py tc.py src/terminalcore/__main__.py src/terminalcore/cli/index.py src/terminalcore/tui/app.py
+# Clone and install in dev mode
+git clone https://github.com/GajjarB/kite-aso.git
+cd kite-aso
+pip install -e ".[dev]"
+
+# Run tests
+python -m pytest tests/
 ```
 
-Launch the shell locally without editable install:
+---
 
-```bash
-python terminalcore.py
-python tc.py status
-```
+## 📄 License
 
-## Customization Guide
-
-TerminalCore is designed to be replaceable behind the adapter boundary:
-
-- swap `DemoSystemAdapter` with a real adapter
-- keep `ConfigStore` for local state
-- reuse the same CLI and TUI shell
-- add domain-specific cards, tables, and doctor checks
-- preserve the warm theme or provide additional theme modules
-
-## Free And Legal ASO Policy
-
-The Kite ASO subsystem remains intentionally conservative:
-
-- public data only
-- approved free public access patterns only
-- no login bypass, paywall bypass, CAPTCHA circumvention, or anti-bot evasion
-- uncertain sources are disabled instead of used silently
-
-The source policy lives in `config/source_registry.json`.
+MIT © [Bhargav Gajjar](https://github.com/GajjarB)
