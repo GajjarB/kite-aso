@@ -16,6 +16,7 @@ from .commands.init import run_init_command
 from .commands.logs import run_logs_command
 from .commands.run import run_primary_action
 from .commands.status import run_status_command
+from .commands.saas import run_saas_command
 
 console = Console()
 
@@ -51,6 +52,11 @@ def build_parser() -> argparse.ArgumentParser:
 
     subparsers.add_parser("doctor")
     subparsers.add_parser("help")
+
+    saas_parser = subparsers.add_parser("saas", help="Launch the local web console")
+    saas_parser.add_argument("--host", default="127.0.0.1", help="Host to bind to (default: 127.0.0.1)")
+    saas_parser.add_argument("--port", type=int, default=8787, help="Port to listen on (default: 8787)")
+
     return parser
 
 
@@ -94,6 +100,8 @@ def main(argv: list[str] | None = None) -> int:
                 return run_config_set(args.key, args.value)
             if args.config_command == "reset":
                 return run_config_reset()
+        if args.command == "saas":
+            return run_saas_command(host=args.host, port=args.port)
         return run_help_command()
     except ConfigValidationError as exc:
         return _print_error(str(exc), "terminalcore config reset")

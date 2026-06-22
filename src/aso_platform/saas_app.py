@@ -39,13 +39,19 @@ class AppConfig:
         self.env = os.getenv("ASO_ENV", "development")
         secret_key = os.getenv("ASO_SECRET_KEY")
         if not secret_key:
-            raise ValueError("ASO_SECRET_KEY environment variable is required")
+            # Auto-generate a stable local key for development / single-user use.
+            # Set ASO_SECRET_KEY in your environment for production deployments.
+            import hashlib
+            import platform
+            seed = f"kite-aso-local-{platform.node()}"
+            secret_key = hashlib.sha256(seed.encode()).hexdigest()
         self.secret_key = secret_key
         self.public_base_url = os.getenv("ASO_PUBLIC_BASE_URL", "http://127.0.0.1:8787")
         self.database_url = os.getenv("ASO_DATABASE_URL", str(DEFAULT_DB_PATH))
         self.project_limit = int(os.getenv("ASO_PROJECT_LIMIT", "3"))
         self.daily_analysis_limit = int(os.getenv("ASO_DAILY_ANALYSIS_LIMIT", "20"))
         self.rank_checks_per_analysis = int(os.getenv("ASO_RANK_CHECKS_PER_ANALYSIS", "3"))
+
 
 
 class AuthStartRequest(BaseModel):
@@ -399,11 +405,17 @@ def _csv(value: str) -> list[str]:
     return [item.strip() for item in str(value or "").split(",") if item.strip()]
 
 
-app = create_app()
+# Module-level app instance (only used when running via `uvicorn saas_app:app` directly).
+# The `run()` function creates its own instance to avoid double-init.
+try:
+    app = create_app()
+except Exception:
+    app = None  # type: ignore[assignment]
 
 
 def run(host: str = "127.0.0.1", port: int = 8787) -> None:
-    uvicorn.run("src.aso_platform.saas_app:app", host=host, port=port, reload=False)
+    _app = create_app()
+    uvicorn.run(_app, host=host, port=port, reload=False)
 
 
 def main(argv: list[str] | None = None) -> int:

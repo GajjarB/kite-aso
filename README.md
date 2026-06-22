@@ -134,7 +134,9 @@ kite sources health
 ### Web Console
 
 ```bash
-kite saas --port 8787
+kite saas                    # start on default port 8787
+kite saas --port 9000        # custom port
+kite saas --host 0.0.0.0     # expose to local network
 # Open: http://127.0.0.1:8787
 ```
 
