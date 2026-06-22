@@ -9,7 +9,7 @@
 ╚═╝  ╚═╝╚═╝   ╚═╝   ╚══════╝
 ```
 
-**Kite ASO** — a keyboard-first App Store Optimization platform with a full hybrid CLI + TUI workspace.
+**Kite ASO** — a keyboard-first App Store Optimization platform with a hybrid CLI and TUI workspace.
 
 [![PyPI version](https://img.shields.io/pypi/v/kite-aso?color=%23D97745&style=flat-square)](https://pypi.org/project/kite-aso/)
 [![Python](https://img.shields.io/pypi/pyversions/kite-aso?style=flat-square)](https://pypi.org/project/kite-aso/)
@@ -20,69 +20,68 @@
 
 ---
 
-## ⚡ Install in one command
+## Installation
 
 ```bash
 pip install kite-aso
 ```
 
-That's it. No cloning, no setup scripts, no config files needed.
+No cloning, no setup scripts, no manual configuration required.
 
-> **Requires Python 3.11+**  
-> Check your version: `python --version`
+**Requires Python 3.11 or later.** Verify your version with `python --version`.
 
 ---
 
-## 🚀 Quick Start
+## Quick Start
 
 ```bash
 kite            # open the full-screen TUI dashboard
-kite init       # first-time setup wizard
-kite status     # health check
-kite doctor     # diagnose any issues
+kite init       # run the first-time setup wizard
+kite status     # print a health summary
+kite doctor     # diagnose environment and config issues
 ```
 
 ---
 
-## ✨ Features
+## Features
 
-### 🖥️ Terminal Dashboard (TUI)
-- Full-screen keyboard-driven interface
+### Terminal Dashboard
+
+- Full-screen keyboard-driven TUI interface
 - Projects, tasks, logs, and settings screens
-- Warm dark theme — easy on the eyes
-- Works on any terminal (macOS, Linux, Windows)
+- Warm dark theme with graceful degradation on limited terminals
+- Runs on macOS, Linux, and Windows
 
-### 🔍 ASO Intelligence
+### ASO Intelligence
+
 - **App inspection** — analyse any app by Google Play package ID
 - **Keyword discovery** — find high-value keywords by category and seed text
 - **Keyword ranking** — snapshot and track keyword positions over time
-- **Competitor analysis** — gap analysis against your rivals
-- **Metadata auditing** — score your title, description, and keyword field
+- **Competitor analysis** — gap analysis against competitor apps
+- **Metadata auditing** — score your title, description, and keyword fields
 - **Review analysis** — sentiment and topic extraction from user reviews
 - **Localisation audit** — compare keyword performance across markets
-- **iOS support** — inspect Apple App Store listings too
+- **iOS support** — inspect Apple App Store listings
 
-### 🌐 Local Web Console
-- SaaS-style browser dashboard at `http://127.0.0.1:8787`
-- Workspace and project management
-- Saved analysis history
-- Source-governance status
+### Web Console
+
+A local SaaS-style browser dashboard at `http://127.0.0.1:8787` with workspace management, project tracking, saved analysis history, and source-governance status.
 
 ---
 
-## 📖 Command Reference
+## Command Reference
 
-### Dashboard & Shell
+### Dashboard and Shell
 
 | Command | Description |
 |---|---|
 | `kite` | Open the full-screen TUI dashboard |
 | `kite init` | Run the first-time setup wizard |
-| `kite dashboard` | Alias — open TUI directly |
+| `kite dashboard` | Open the TUI dashboard directly |
 | `kite status` | Print a health summary |
 | `kite run` | Execute the primary task |
 | `kite doctor` | Run environment and config checks |
-| `kite help` | Show all commands |
+| `kite help` | Show all available commands |
 
 ### Logs
 
@@ -90,14 +89,14 @@ kite doctor     # diagnose any issues
 |---|---|
 | `kite logs` | Show recent logs |
 | `kite logs --tail` | Follow live log output |
-| `kite logs --level error` | Filter by level (`info` `success` `warning` `error`) |
+| `kite logs --level error` | Filter by level: `info` `success` `warning` `error` |
 
 ### Config
 
 | Command | Description |
 |---|---|
 | `kite config list` | Show all config values |
-| `kite config get <key>` | Get one config value |
+| `kite config get <key>` | Get a single config value |
 | `kite config set <key> <value>` | Set a config value |
 | `kite config reset` | Reset config to defaults |
 
@@ -121,12 +120,12 @@ kite competitors add my-workspace com.comp.one,com.comp.two
 kite competitors gap my-workspace
 kite share-of-voice "calculator,bmi" com.example.app --competitors com.comp.one
 
-# Metadata & reviews
+# Metadata and reviews
 kite audit metadata com.example.app --keywords "calculator,bmi"
 kite reviews analyze com.example.app --count 50
 kite localization audit com.example.app --markets en-us,en-gb --keywords calculator
 
-# Reports & alerts
+# Reports and alerts
 kite reports export my-workspace --file report.md --export-format md
 kite alerts check "calculator" com.example.app
 kite sources health
@@ -136,30 +135,30 @@ kite sources health
 
 ```bash
 kite saas --port 8787
-# then open: http://127.0.0.1:8787
+# Open: http://127.0.0.1:8787
 ```
 
 ---
 
-## ⌨️ TUI Keyboard Shortcuts
+## TUI Keyboard Shortcuts
 
 | Key | Action |
 |---|---|
-| `↑` `↓` or `j` `k` | Navigate sidebar |
-| `Enter` or `→` | Open selected section |
-| `←` | Return to dashboard |
+| `Up` `Down` or `j` `k` | Navigate sidebar |
+| `Enter` or `Right` | Open selected section |
+| `Left` | Return to dashboard |
 | `/` | Focus search |
 | `?` | Open help screen |
 | `r` | Refresh current screen |
 | `d` | Run primary action |
 | `l` | Open logs |
 | `s` | Open settings |
-| `Esc` | Close modal / go back |
+| `Esc` | Close modal or go back |
 | `q` or `Ctrl+C` | Quit |
 
 ---
 
-## ⚙️ Config
+## Configuration
 
 Config is stored at `~/.terminalcore/config.json` and created automatically on first run.
 
@@ -180,24 +179,24 @@ kite config reset
 
 ---
 
-## 🛡️ Data Policy
+## Data Policy
 
-Kite uses **public data only**:
+Kite uses public data sources only:
 
 - No login bypass, paywall bypass, or CAPTCHA circumvention
 - No anti-bot evasion tactics
-- Uncertain or legally grey sources are **disabled**, not silently used
+- Uncertain or legally ambiguous sources are disabled, not silently used
 
-Source rules live in `config/source_registry.json`.
+Source rules are defined in `config/source_registry.json`.
 
 ---
 
-## 🤝 Contributing
+## Contributing
 
-Contributions are welcome! See [CONTRIBUTING.md](CONTRIBUTING.md) for guidelines.
+Contributions are welcome. See [CONTRIBUTING.md](CONTRIBUTING.md) for guidelines.
 
 ```bash
-# Clone and install in dev mode
+# Clone and install in development mode
 git clone https://github.com/GajjarB/kite-aso.git
 cd kite-aso
 pip install -e ".[dev]"
@@ -208,6 +207,6 @@ python -m pytest tests/
 
 ---
 
-## 📄 License
+## License
 
-MIT © [Bhargav Gajjar](https://github.com/GajjarB)
+MIT — see [LICENSE](LICENSE) for details.
