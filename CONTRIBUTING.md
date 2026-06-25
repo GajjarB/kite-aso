@@ -1,6 +1,6 @@
-# Contributing To ASO PRO
+# Contributing To KITE ASO
 
-Thank you for helping make ASO PRO useful for mobile app developers.
+Thank you for helping make KITE ASO useful for mobile app developers.
 
 ## Contribution Principles
 
