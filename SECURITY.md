@@ -10,7 +10,7 @@ If you find a security or compliance issue, do not publish exploit details in a 
 
 ## Non-Negotiable Data Rules
 
-ASO PRO must not include:
+KITE ASO must not include:
 
 - credential collection,
 - login bypass,
