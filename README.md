@@ -11,7 +11,7 @@
 
 ```
 
-**Kite ASO** — a keyboard-first App Store Optimization platform with a hybrid CLI and TUI workspace.
+**Kite ASO** - a keyboard-first App Store Optimization platform with a hybrid CLI and TUI workspace.
 
 [![PyPI version](https://img.shields.io/pypi/v/kite-aso?color=%23D97745&style=flat-square)](https://pypi.org/project/kite-aso/)
 [![Python](https://img.shields.io/pypi/pyversions/kite-aso?style=flat-square)](https://pypi.org/project/kite-aso/)
@@ -56,14 +56,14 @@ kite doctor     # diagnose environment and config issues
 
 ### ASO Intelligence
 
-- **App inspection** — analyse any app by Google Play package ID
-- **Keyword discovery** — find high-value keywords by category and seed text
-- **Keyword ranking** — snapshot and track keyword positions over time
-- **Competitor analysis** — gap analysis against competitor apps
-- **Metadata auditing** — score your title, description, and keyword fields
-- **Review analysis** — sentiment and topic extraction from user reviews
-- **Localisation audit** — compare keyword performance across markets
-- **iOS support** — inspect Apple App Store listings
+- **App inspection** - analyse any app by Google Play package ID
+- **Keyword discovery** - find high-value keywords by category and seed text
+- **Keyword ranking** - snapshot and track keyword positions over time
+- **Competitor analysis** - gap analysis against competitor apps
+- **Metadata auditing** - score your title, description, and keyword fields
+- **Review analysis** - sentiment and topic extraction from user reviews
+- **Localisation audit** - compare keyword performance across markets
+- **iOS support** - inspect Apple App Store listings
 
 ### Web Console
 
@@ -213,4 +213,4 @@ python -m pytest tests/
 
 ## License
 
-MIT — see [LICENSE](LICENSE) for details.
+MIT - see [LICENSE](LICENSE) for details.
