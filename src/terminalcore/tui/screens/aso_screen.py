@@ -5,8 +5,8 @@ from __future__ import annotations
 from textual.containers import Vertical
 from textual.widgets import Static
 
-from src.aso_platform.services.intelligence import SourceHealthService
-from src.aso_platform.services.workspace import WorkspaceService
+from aso_platform.services.intelligence import SourceHealthService
+from aso_platform.services.workspace import WorkspaceService
 
 
 class AsoWorkspacesScreen(Vertical):

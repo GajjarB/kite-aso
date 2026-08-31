@@ -1,6 +1,6 @@
 import unittest
 
-from src.aso_platform.capabilities import audit_capabilities, load_capability_catalog
+from aso_platform.capabilities import audit_capabilities, load_capability_catalog
 
 
 class CapabilityCatalogTests(unittest.TestCase):

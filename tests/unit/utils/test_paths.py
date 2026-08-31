@@ -1,7 +1,7 @@
 from pathlib import Path
 from unittest.mock import patch
 
-from src.terminalcore.utils.paths import (
+from terminalcore.utils.paths import (
     APP_DIR,
     CONFIG_PATH,
     LOGS_PATH,

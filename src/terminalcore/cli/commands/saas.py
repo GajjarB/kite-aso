@@ -35,7 +35,7 @@ def run_saas_command(host: str = "127.0.0.1", port: int = 8787) -> int:
     console.print()
 
     try:
-        from src.aso_platform.saas_app import run as saas_run  # type: ignore[import]
+        from aso_platform.saas_app import run as saas_run  # type: ignore[import]
         saas_run(host=host, port=port)
     except ImportError:
         # Fallback for installed package layout

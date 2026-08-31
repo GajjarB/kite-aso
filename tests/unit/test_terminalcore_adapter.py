@@ -1,7 +1,7 @@
 import unittest
 
-from src.terminalcore.core.adapters.demo_system_adapter import DemoSystemAdapter
-from src.terminalcore.core.config.config_schema import default_config
+from terminalcore.core.adapters.demo_system_adapter import DemoSystemAdapter
+from terminalcore.core.config.config_schema import default_config
 
 
 class TerminalCoreAdapterTests(unittest.TestCase):

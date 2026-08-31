@@ -1,5 +1,5 @@
 """Theme exports."""
 
-from .claude_warm import CLAUDE_WARM, TerminalTheme
+from .kite_warm import KITE_WARM, TerminalTheme
 
-__all__ = ["CLAUDE_WARM", "TerminalTheme"]
+__all__ = ["KITE_WARM", "TerminalTheme"]

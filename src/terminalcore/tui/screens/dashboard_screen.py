@@ -10,8 +10,8 @@ from ...core.adapters.demo_system_adapter import DemoSystemAdapter
 from ...core.types import AppConfig
 from ...utils.format import format_time, human_status, title_case_env
 from ..components.card import StatCard
-from src.aso_platform.services.intelligence import SourceHealthService
-from src.aso_platform.services.workspace import WorkspaceService
+from aso_platform.services.intelligence import SourceHealthService
+from aso_platform.services.workspace import WorkspaceService
 
 
 class DashboardScreen(Vertical):

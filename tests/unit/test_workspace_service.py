@@ -2,7 +2,7 @@ import tempfile
 import unittest
 from pathlib import Path
 
-from src.aso_platform.services.workspace import WorkspaceService
+from aso_platform.services.workspace import WorkspaceService
 
 
 class StubAppService:

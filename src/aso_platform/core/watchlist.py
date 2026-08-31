@@ -8,7 +8,7 @@ import json
 from pathlib import Path
 from datetime import datetime
 
-_REPORTS_DIR = Path(__file__).parent.parent / "reports"
+from ..paths import REPORTS_DIR as _REPORTS_DIR
 _WATCHLIST_FILE = _REPORTS_DIR / "watchlist.json"
 
 
@@ -17,7 +17,7 @@ _WATCHLIST_FILE = _REPORTS_DIR / "watchlist.json"
 # ─────────────────────────────────────────────
 
 def _load() -> dict:
-    _REPORTS_DIR.mkdir(exist_ok=True)
+    _REPORTS_DIR.mkdir(parents=True, exist_ok=True)
     if not _WATCHLIST_FILE.exists():
         return {"apps": {}, "updated_at": ""}
     try:
@@ -28,7 +28,7 @@ def _load() -> dict:
 
 def _save(data: dict):
     data["updated_at"] = datetime.now().isoformat()
-    _REPORTS_DIR.mkdir(exist_ok=True)
+    _REPORTS_DIR.mkdir(parents=True, exist_ok=True)
     _WATCHLIST_FILE.write_text(
         json.dumps(data, indent=2, ensure_ascii=False, default=str)
     )

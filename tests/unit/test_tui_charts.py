@@ -1,6 +1,6 @@
 import unittest
 
-from src.aso_platform.tui_charts import count_by, is_ascii, mini_bar, rank_bar, score_buckets, sparkline
+from aso_platform.tui_charts import count_by, is_ascii, mini_bar, rank_bar, score_buckets, sparkline
 
 
 class TuiChartTests(unittest.TestCase):

@@ -15,7 +15,9 @@ from .app_inspector import AppInspectionService
 from .keyword_discovery import KeywordDiscoveryService
 from .keyword_rank import KeywordRankService, RankConfig
 
-DEFAULT_WORKSPACE_DIR = Path(__file__).resolve().parents[3] / "data" / "workspaces"
+from ..paths import DATA_DIR
+
+DEFAULT_WORKSPACE_DIR = DATA_DIR / "workspaces"
 
 
 def _slugify(value: str) -> str:

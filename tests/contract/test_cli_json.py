@@ -4,8 +4,8 @@ import unittest
 from contextlib import redirect_stdout
 from unittest.mock import patch
 
-from src.aso_platform.cli import main
-from src.aso_platform.models import AppDetails
+from aso_platform.cli import main
+from aso_platform.models import AppDetails
 
 
 class StubProvider:
@@ -45,7 +45,7 @@ class StubProvider:
 class CliContractTests(unittest.TestCase):
     def test_cli_json_contract_contains_required_sections(self):
         output = io.StringIO()
-        with patch("src.aso_platform.cli.AppInspectionService") as service_cls:
+        with patch("aso_platform.cli.AppInspectionService") as service_cls:
             service_cls.return_value.inspect.return_value.to_dict.return_value = {
                 "request_context": {
                     "package_id": "com.example.cli",
@@ -94,7 +94,7 @@ class CliContractTests(unittest.TestCase):
 
     def test_rank_cli_json_contract_contains_required_sections(self):
         output = io.StringIO()
-        with patch("src.aso_platform.cli.KeywordRankService") as service_cls:
+        with patch("aso_platform.cli.KeywordRankService") as service_cls:
             service_cls.return_value.rank.return_value.to_dict.return_value = {
                 "request_context": {
                     "keyword": "cleaner",
@@ -203,7 +203,7 @@ class CliContractTests(unittest.TestCase):
 
     def test_workspace_init_and_show_cli_json_contract_contains_required_sections(self):
         output = io.StringIO()
-        with patch("src.aso_platform.cli.WorkspaceService") as service_cls:
+        with patch("aso_platform.cli.WorkspaceService") as service_cls:
             service_cls.return_value.create.return_value.to_dict.return_value = {
                 "workspace_id": "calc-lab",
                 "name": "Calc Lab",
@@ -236,7 +236,7 @@ class CliContractTests(unittest.TestCase):
 
     def test_workspace_baseline_cli_json_contract_contains_required_sections(self):
         output = io.StringIO()
-        with patch("src.aso_platform.cli.WorkspaceService") as service_cls:
+        with patch("aso_platform.cli.WorkspaceService") as service_cls:
             service_cls.return_value.baseline.return_value.to_dict.return_value = {
                 "workspace": {
                     "workspace_id": "calc-lab",

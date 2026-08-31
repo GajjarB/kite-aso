@@ -1,7 +1,7 @@
 import unittest
 
-from src.aso_platform.models import ComplianceStatus
-from src.aso_platform.registry import DEFAULT_REGISTRY_PATH, RegistryError, ensure_source_approved, get_source, load_source_registry
+from aso_platform.models import ComplianceStatus
+from aso_platform.registry import DEFAULT_REGISTRY_PATH, RegistryError, ensure_source_approved, get_source, load_source_registry
 
 
 class RegistryTests(unittest.TestCase):

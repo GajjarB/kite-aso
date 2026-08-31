@@ -9,6 +9,7 @@ from pathlib import Path
 from typing import Sequence
 
 from .capabilities import audit_capabilities
+from .paths import CACHE_DIR, REPORTS_DIR
 from .registry import load_source_registry
 from .services.app_inspector import AppInspectionService
 from .services.intelligence import (
@@ -30,30 +31,30 @@ from .services.keyword_rank import KeywordRankService, RankConfig
 from .services.workspace import WorkspaceService
 from .saas_app import run as run_saas_app
 from .ui.branding import APP_NAME, APP_TAGLINE, render_kite_logo
-from core.keywords import available_keyword_categories, get_category_seed_keywords
+from .core.keywords import available_keyword_categories, get_category_seed_keywords
 
 VERSION = "0.2.0"
 
 EXAMPLES = """examples:
-  python -m src.aso_platform.cli doctor
-  python -m src.aso_platform.cli workspace init "calc-lab" com.example.calc --category tools --seed "scientific calculator, bmi"
-  python -m src.aso_platform.cli workspace show calc-lab
-  python -m src.aso_platform.cli workspace baseline calc-lab --format json
-  python -m src.aso_platform.cli categories
-  python -m src.aso_platform.cli categories --category tools --format json
-  python -m src.aso_platform.cli keywords --category tools --seed "bmi calculator"
-  python -m src.aso_platform.cli keywords build --category tools --seed "bmi calculator"
-  python -m src.aso_platform.cli keywords score "bmi calculator,loan calculator" --app-text "calculator finance tools"
-  python -m src.aso_platform.cli inspect com.google.android.calculator --format json
-  python -m src.aso_platform.cli rank "calculator" com.google.android.calculator --no-history
-  python -m src.aso_platform.cli rank history "calculator" com.google.android.calculator --format json
-  python -m src.aso_platform.cli competitors gap calc-lab --format json
-  python -m src.aso_platform.cli audit metadata com.google.android.calculator --keywords "calculator,math"
-  python -m src.aso_platform.cli reviews analyze com.google.android.calculator --count 50
-  python -m src.aso_platform.cli localization audit com.google.android.calculator --markets "en-us,en-gb" --keywords "calculator"
-  python -m src.aso_platform.cli ios inspect com.apple.Pages --country us
-  python -m src.aso_platform.cli capabilities --status planned
-  python -m src.aso_platform.cli saas --port 8787
+  python -m aso_platform.cli doctor
+  python -m aso_platform.cli workspace init "calc-lab" com.example.calc --category tools --seed "scientific calculator, bmi"
+  python -m aso_platform.cli workspace show calc-lab
+  python -m aso_platform.cli workspace baseline calc-lab --format json
+  python -m aso_platform.cli categories
+  python -m aso_platform.cli categories --category tools --format json
+  python -m aso_platform.cli keywords --category tools --seed "bmi calculator"
+  python -m aso_platform.cli keywords build --category tools --seed "bmi calculator"
+  python -m aso_platform.cli keywords score "bmi calculator,loan calculator" --app-text "calculator finance tools"
+  python -m aso_platform.cli inspect com.google.android.calculator --format json
+  python -m aso_platform.cli rank "calculator" com.google.android.calculator --no-history
+  python -m aso_platform.cli rank history "calculator" com.google.android.calculator --format json
+  python -m aso_platform.cli competitors gap calc-lab --format json
+  python -m aso_platform.cli audit metadata com.google.android.calculator --keywords "calculator,math"
+  python -m aso_platform.cli reviews analyze com.google.android.calculator --count 50
+  python -m aso_platform.cli localization audit com.google.android.calculator --markets "en-us,en-gb" --keywords "calculator"
+  python -m aso_platform.cli ios inspect com.apple.Pages --country us
+  python -m aso_platform.cli capabilities --status planned
+  python -m aso_platform.cli saas --port 8787
 """
 
 
@@ -415,7 +416,6 @@ def build_parser() -> argparse.ArgumentParser:
 def _doctor_payload() -> dict:
     sources = load_source_registry()
     audit = audit_capabilities(registry=sources)
-    root = Path(__file__).resolve().parents[2]
     checks = [
         {
             "name": "source_registry",
@@ -434,13 +434,13 @@ def _doctor_payload() -> dict:
         },
         {
             "name": "reports_directory",
-            "status": "ok" if (root / "reports").exists() else "warning",
-            "details": str(root / "reports"),
+            "status": "ok" if REPORTS_DIR.exists() else "warning",
+            "details": str(REPORTS_DIR),
         },
         {
             "name": "cache_directory",
-            "status": "ok" if (root / "cache").exists() else "warning",
-            "details": str(root / "cache"),
+            "status": "ok" if CACHE_DIR.exists() else "warning",
+            "details": str(CACHE_DIR),
         },
     ]
     status = "ok" if all(check["status"] == "ok" for check in checks) else "warning"
@@ -559,197 +559,27 @@ def _workspace_baseline_text(payload: dict) -> str:
     return "\n".join(lines)
 
 
-def main(argv: Sequence[str] | None = None) -> int:
-    raw_argv = list(sys.argv[1:] if argv is None else argv)
-    custom_exit = _handle_nested_legacy_commands(raw_argv)
-    if custom_exit is not None:
-        return custom_exit
-    parser = build_parser()
-    args = parser.parse_args(raw_argv)
-    if args.command == "doctor":
-        payload = _doctor_payload()
-        _emit(payload, args, _doctor_text(payload))
-        return 0
-    if args.command == "workspace":
-        service = WorkspaceService()
-        if args.workspace_command == "init":
-            payload = service.create(
-                args.name,
-                args.package_id,
-                category=args.category,
-                seed_text=args.seed,
-                lang=args.lang,
-                country=args.country,
-                competitors=_csv_items(args.competitors),
-                notes=args.notes,
-                overwrite=args.overwrite,
-            ).to_dict()
-            _emit(payload, args, _workspace_text(payload))
-            return 0
-        if args.workspace_command == "show":
-            payload = service.get(args.workspace).to_dict()
-            _emit(payload, args, _workspace_text(payload))
-            return 0
-        if args.workspace_command == "list":
-            payload = {"workspaces": [item.to_dict() for item in service.list()]}
-            _emit(payload, args, _workspace_list_text(payload))
-            return 0
-        if args.workspace_command == "baseline":
-            payload = service.baseline(
-                args.workspace,
-                keyword_limit=args.keyword_limit,
-                top_keywords=args.top_keywords,
-                rank_limit=args.rank_limit,
-                save_history=args.save_history,
-            ).to_dict()
-            _emit(payload, args, _workspace_baseline_text(payload))
-            return 0
-        return 1
-    if args.command == "categories":
-        payload = _categories_payload(args.category)
-        _emit(payload, args, _categories_text(payload))
-        return 0
-    if args.command in {"keywords", "discover-keywords", "discover"}:
-        if not args.category and not args.seed:
-            parser.error("keywords requires --category, --seed, or both")
-        service = KeywordDiscoveryService()
-        report = service.discover(
-            seed_text=args.seed,
+def _handle_doctor(args: argparse.Namespace, parser: argparse.ArgumentParser) -> int:
+    payload = _doctor_payload()
+    _emit(payload, args, _doctor_text(payload))
+    return 0
+
+
+def _handle_workspace(args: argparse.Namespace, parser: argparse.ArgumentParser) -> int:
+    service = WorkspaceService()
+    if args.workspace_command == "init":
+        payload = service.create(
+            args.name,
+            args.package_id,
             category=args.category,
+            seed_text=args.seed,
             lang=args.lang,
             country=args.country,
-            limit=args.limit,
+            competitors=_csv_items(args.competitors),
+            notes=args.notes,
+            overwrite=args.overwrite,
         ).to_dict()
-        category = report["category"].get("category") or "none"
-        lines = [
-            render_kite_logo().rstrip(),
-            "",
-            f"{APP_NAME} Keyword Discovery",
-            f"Category: {category}",
-            f"Confidence: {report['confidence']['label']} ({report['confidence']['score']})",
-            "",
-            "Top keywords:",
-        ]
-        for index, item in enumerate(report["keywords"][: min(args.limit, 25)], 1):
-            lines.append(
-                f"{index:2}. {item['keyword']} "
-                f"[{item['type']}, score={item['composite_score']}, priority={item['priority']}, confidence={item['confidence']}]"
-            )
-        lines.extend(_warning_lines(report["warnings"]))
-        _emit(report, args, "\n".join(lines))
-        return 0
-    if args.command == "inspect":
-        service = AppInspectionService()
-        report = service.inspect(args.package_id, lang=args.lang, country=args.country).to_dict()
-        lines = [
-            render_kite_logo().rstrip(),
-            "",
-            f"{APP_NAME} App Inspect",
-            f"Package: {report['app']['package_id']}",
-            f"Title: {report['app']['title']}",
-            f"Score: {report['scores'][0]['value'] if report['scores'] else 'n/a'}",
-            f"Confidence: {report['confidence']['label']} ({report['confidence']['score']})",
-        ]
-        lines.extend(_warning_lines(report["warnings"]))
-        _emit(report, args, "\n".join(lines))
-        return 0
-    if args.command == "rank":
-        service = KeywordRankService()
-        report = service.rank(
-            RankConfig(
-                keyword=args.keyword,
-                target_package_id=args.package_id,
-                lang=args.lang,
-                country=args.country,
-                limit=args.limit,
-                save_history=not args.no_history,
-            )
-        ).to_dict()
-        position = report["target_position"] if report["target_position"] is not None else "not found"
-        lines = [
-            render_kite_logo().rstrip(),
-            "",
-            f"{APP_NAME} Rank Check",
-            f"Keyword: {report['keyword']}",
-            f"Target: {report['target_package_id']}",
-            f"Position: {position}",
-            f"Confidence: {report['confidence']['label']} ({report['confidence']['score']})",
-        ]
-        lines.extend(_warning_lines(report["warnings"]))
-        _emit(report, args, "\n".join(lines))
-        return 0
-    if args.command == "capabilities":
-        audit = audit_capabilities()
-        rows = audit["capabilities"]
-        if args.area:
-            rows = [row for row in rows if row["area"] == args.area]
-        if args.status:
-            rows = [row for row in rows if row["status"] == args.status]
-        payload = {"summary": audit["summary"], "capabilities": rows}
-        lines = [
-            render_kite_logo().rstrip(),
-            "",
-            f"{APP_NAME} Capability Catalog",
-            f"Total: {len(rows)}",
-            f"Legal ready: {sum(1 for row in rows if row['legal_ready'])}",
-            "",
-            "Capabilities:",
-        ]
-        for row in rows:
-            readiness = "ready" if row["legal_ready"] else "blocked"
-            lines.append(f"- {row['priority']} {row['status']} {readiness}: {row['area']} / {row['name']}")
-        _emit(payload, args, "\n".join(lines))
-        return 0
-    if args.command == "share-of-voice":
-        options = ShareOfVoiceOptions(lang=args.lang, country=args.country, limit=args.limit)
-        payload = KeywordIntelligenceService().share_of_voice(
-            _parse_csv(args.keywords),
-            args.package_id,
-            _parse_csv(args.competitors),
-            options=options,
-        )
-        _emit(payload, args, _simple_report_text("Share Of Voice", payload))
-        return 0
-    if args.command == "competitors":
-        service = CompetitorIntelligenceService()
-        if args.competitors_command == "add":
-            payload = service.add(args.workspace, _parse_csv(args.package_ids))
-        elif args.competitors_command == "remove":
-            payload = service.remove(args.workspace, _parse_csv(args.package_ids))
-        elif args.competitors_command == "list":
-            workspace = WorkspaceService().get(args.workspace)
-            payload = {
-                "request_context": {"workspace": workspace.workspace_id, "sources": ["local_modeled_estimates"]},
-                "competitors": workspace.competitors,
-                "evidence": [],
-                "warnings": [],
-                "confidence": {"label": "high", "score": 95, "rationale": "Competitors are read from local workspace configuration."},
-            }
-        elif args.competitors_command == "gap":
-            payload = service.gap(args.workspace, keywords=_parse_csv(args.keywords) or None, limit=args.limit)
-        elif args.competitors_command == "timeline":
-            payload = service.timeline(args.workspace)
-        else:
-            payload = service.creatives(args.workspace)
-        _emit(payload, args, _simple_report_text("Competitors", payload))
-        return 0
-    if args.command == "audit" and args.audit_command == "metadata":
-        payload = MetadataAuditService().audit(
-            args.package_id,
-            _parse_csv(args.keywords),
-            lang=args.lang,
-            country=args.country,
-        )
-        _emit(payload, args, _simple_report_text("Metadata Audit", payload))
-        return 0
-    if args.command == "reviews" and args.reviews_command == "analyze":
-        payload = ReviewIntelligenceService().analyze(
-            args.package_id,
-            count=args.count,
-            lang=args.lang,
-            country=args.country,
-        )
-        _emit(payload, args, _simple_report_text("Review Intelligence", payload))
+        _emit(payload, args, _workspace_text(payload))
         return 0
     if args.workspace_command == "show":
         payload = service.get(args.workspace).to_dict()
@@ -770,6 +600,7 @@ def main(argv: Sequence[str] | None = None) -> int:
         _emit(payload, args, _workspace_baseline_text(payload))
         return 0
     return 1
+
 
 def _handle_categories(args: argparse.Namespace, parser: argparse.ArgumentParser) -> int:
     payload = _categories_payload(args.category)

@@ -1,6 +1,6 @@
 import unittest
 
-from src.aso_platform.ui.branding import APP_TAGLINE, KITE_ASCII_LOGO, render_kite_logo
+from aso_platform.ui.branding import APP_TAGLINE, KITE_ASCII_LOGO, render_kite_logo
 
 
 class BrandingTests(unittest.TestCase):

@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import argparse
+import sys
 
 from rich.console import Console
 from rich.panel import Panel
@@ -20,13 +21,36 @@ from .commands.saas import run_saas_command
 
 console = Console()
 
+# ASO commands live in aso_platform's own parser. `kite` is the documented front
+# door for them, so hand these through instead of failing on an unknown choice.
+# `doctor` and `saas` stay with TerminalCore, which defines its own.
+ASO_COMMANDS = frozenset({
+    "workspace",
+    "categories",
+    "keywords",
+    "discover-keywords",
+    "discover",
+    "inspect",
+    "rank",
+    "capabilities",
+    "share-of-voice",
+    "competitors",
+    "audit",
+    "reviews",
+    "localization",
+    "ios",
+    "reports",
+    "alerts",
+    "sources",
+})
+
 
 def build_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(
         prog="terminalcore",
         description="A warm, keyboard-first hybrid CLI and TUI workspace.",
     )
-    parser.add_argument("--version", action="version", version="TerminalCore 1.0.0")
+    parser.add_argument("--version", action="version", version="TerminalCore 1.0.1")
     subparsers = parser.add_subparsers(dest="command")
 
     subparsers.add_parser("init")
@@ -74,7 +98,13 @@ def _print_error(message: str, fix: str = "terminalcore doctor") -> int:
 
 
 def main(argv: list[str] | None = None) -> int:
-    args = build_parser().parse_args(argv)
+    raw_argv = list(sys.argv[1:] if argv is None else argv)
+    if raw_argv and raw_argv[0] in ASO_COMMANDS:
+        from aso_platform.cli import main as aso_main
+
+        return aso_main(raw_argv)
+
+    args = build_parser().parse_args(raw_argv)
     try:
         if args.command in {None, "dashboard"}:
             return run_dashboard_command()

@@ -1,8 +1,8 @@
 import unittest
 from unittest.mock import patch
 
-from src.aso_platform.models import AppDetails
-from src.aso_platform.services.app_inspector import AppInspectionService
+from aso_platform.models import AppDetails
+from aso_platform.services.app_inspector import AppInspectionService
 
 
 class StubProvider:
@@ -116,9 +116,9 @@ class AppInspectionTests(unittest.TestCase):
         # Stub has score 85, no warnings = 85. No reviews drops it by 20 to 65. label = "medium"
         self.assertEqual(report["confidence"]["label"], "medium")
 
-    @patch("src.aso_platform.services.app_inspector.AppInspectionService")
+    @patch("aso_platform.services.app_inspector.AppInspectionService")
     def test_inspect_app_convenience_function(self, MockService):
-        from src.aso_platform.services.app_inspector import inspect_app
+        from aso_platform.services.app_inspector import inspect_app
         mock_instance = MockService.return_value
         mock_instance.inspect.return_value.to_dict.return_value = {"dummy": "report"}
 

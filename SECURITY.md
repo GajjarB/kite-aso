@@ -24,7 +24,7 @@ KITE ASO must not include:
 
 ## Source Disable Rule
 
-If a source becomes legally uncertain, technically blocked, or no longer free, it must be marked disabled or review-required in `config/source_registry.json`.
+If a source becomes legally uncertain, technically blocked, or no longer free, it must be marked disabled or review-required in `src/aso_platform/resources/source_registry.json`.
 
 The product should degrade gracefully with warnings instead of continuing collection silently.
 

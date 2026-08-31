@@ -3,9 +3,9 @@ import tempfile
 import unittest
 from pathlib import Path
 
-from src.terminalcore.core.config.config_schema import default_config
-from src.terminalcore.core.config.config_store import ConfigStore
-from src.terminalcore.tui.app import TerminalCoreApp
+from terminalcore.core.config.config_schema import default_config
+from terminalcore.core.config.config_store import ConfigStore
+from terminalcore.tui.app import TerminalCoreApp
 
 
 class TerminalCoreTuiTests(unittest.IsolatedAsyncioTestCase):

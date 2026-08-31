@@ -3,13 +3,28 @@ import tempfile
 import unittest
 from pathlib import Path
 
-from src.terminalcore.core.config.config_schema import default_config, validate_config
-from src.terminalcore.core.config.config_store import ConfigStore
-from src.terminalcore.utils.errors import ConfigValidationError
+from terminalcore.core.config.config_schema import default_config, normalize_theme, validate_config
+from terminalcore.core.config.config_store import ConfigStore
+from terminalcore.utils.errors import ConfigValidationError
 
 
 class TerminalCoreConfigTests(unittest.TestCase):
     def test_validate_config_accepts_valid_payload(self):
+        config = validate_config(
+            {
+                "workspaceName": "TerminalCore",
+                "environment": "development",
+                "theme": "kite-warm",
+                "demoData": True,
+                "createdAt": "2026-05-16T00:00:00+00:00",
+                "version": "1.0.0",
+            }
+        )
+
+        self.assertEqual(config.workspace_name, "TerminalCore")
+        self.assertEqual(config.environment, "development")
+
+    def test_validate_config_migrates_legacy_theme_name(self):
         config = validate_config(
             {
                 "workspaceName": "TerminalCore",
@@ -21,15 +36,42 @@ class TerminalCoreConfigTests(unittest.TestCase):
             }
         )
 
-        self.assertEqual(config.workspace_name, "TerminalCore")
-        self.assertEqual(config.environment, "development")
+        self.assertEqual(config.theme, "kite-warm")
+
+    def test_config_store_rewrites_legacy_theme_on_save(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            path = Path(tmp) / "config.json"
+            path.write_text(
+                json.dumps(
+                    {
+                        "workspaceName": "Lab",
+                        "environment": "development",
+                        "theme": "claude-warm",
+                        "demoData": True,
+                        "createdAt": "2026-05-16T00:00:00+00:00",
+                        "version": "1.0.0",
+                    }
+                ),
+                encoding="utf-8",
+            )
+            store = ConfigStore(path)
+
+            loaded = store.load()
+            self.assertEqual(loaded.theme, "kite-warm")
+
+            store.save(loaded)
+            self.assertEqual(json.loads(path.read_text(encoding="utf-8"))["theme"], "kite-warm")
+
+    def test_normalize_theme_leaves_current_names_alone(self):
+        self.assertEqual(normalize_theme("kite-warm"), "kite-warm")
+        self.assertEqual(normalize_theme("  Classic-Dark  "), "classic-dark")
 
     def test_validate_config_rejects_missing_workspace_name(self):
         with self.assertRaises(ConfigValidationError):
             validate_config(
                 {
                     "environment": "development",
-                    "theme": "claude-warm",
+                    "theme": "kite-warm",
                     "demoData": True,
                     "createdAt": "2026-05-16T00:00:00+00:00",
                     "version": "1.0.0",

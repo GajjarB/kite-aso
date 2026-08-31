@@ -2,7 +2,7 @@
 
 from __future__ import annotations
 
-from core.fetcher import fetch_app_details, search_apps
+from ..core.fetcher import fetch_app_details, search_apps
 
 from ..models import AppDetails
 

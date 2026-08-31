@@ -15,8 +15,8 @@ from statistics import mean
 from dataclasses import dataclass
 from typing import Any
 
-from core.fetcher import fetch_reviews
-from core.keywords import extract_keywords_from_text, mine_review_keywords
+from ..core.fetcher import fetch_reviews
+from ..core.keywords import extract_keywords_from_text, mine_review_keywords
 
 from ..providers import PlayStorePublicProvider, PlayStoreSearchProvider
 from ..providers.apple_store import AppleLookupProvider

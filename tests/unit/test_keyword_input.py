@@ -1,6 +1,6 @@
 import unittest
 
-from core.keywords import (
+from aso_platform.core.keywords import (
     build_keyword_candidates,
     build_public_search_enrichment,
     get_category_seed_keywords,

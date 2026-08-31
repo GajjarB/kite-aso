@@ -2,7 +2,7 @@ import tempfile
 import unittest
 from pathlib import Path
 
-from src.aso_platform.services.saas_store import SaasStore
+from aso_platform.services.saas_store import SaasStore
 
 
 class SaasStoreTests(unittest.TestCase):
