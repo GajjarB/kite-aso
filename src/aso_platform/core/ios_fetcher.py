@@ -11,8 +11,8 @@ import urllib.parse
 from pathlib import Path
 from datetime import datetime
 
-CACHE_DIR = Path(__file__).parent.parent / "cache"
-CACHE_DIR.mkdir(exist_ok=True)
+from ..paths import CACHE_DIR
+CACHE_DIR.mkdir(parents=True, exist_ok=True)
 
 _ITUNES_BASE = "https://itunes.apple.com"
 

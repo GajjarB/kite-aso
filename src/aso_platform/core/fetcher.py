@@ -21,8 +21,8 @@ except ImportError:
     GPS_AVAILABLE = False
     GPSSort = None
 
-CACHE_DIR = Path(__file__).parent.parent / "cache"
-CACHE_DIR.mkdir(exist_ok=True)
+from ..paths import CACHE_DIR
+CACHE_DIR.mkdir(parents=True, exist_ok=True)
 
 
 def validate_package_id(package_id: str) -> tuple[bool, str]:

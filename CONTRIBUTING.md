@@ -12,7 +12,7 @@ Thank you for helping make KITE ASO useful for mobile app developers.
 
 ## Good First Contributions
 
-- Add category keyword packs to the local taxonomy in `core/keywords.py`.
+- Add category keyword packs to the local taxonomy in `src/aso_platform/core/keywords.py`.
 - Improve scoring tests in `tests/unit/test_keyword_input.py`.
 - Add CLI contract tests in `tests/contract/test_cli_json.py`.
 - Improve docs, examples, and report explanations.
@@ -20,7 +20,7 @@ Thank you for helping make KITE ASO useful for mobile app developers.
 
 ## Source Governance
 
-Every new data source must be added to `config/source_registry.json` with:
+Every new data source must be added to `src/aso_platform/resources/source_registry.json` with:
 
 - purpose,
 - cost,
@@ -44,7 +44,7 @@ Before submitting changes, run:
 
 ```bash
 python -m unittest discover -s tests -p "test_*.py"
-python -m py_compile aso.py core/keywords.py src/aso_platform/cli.py
+python -m py_compile aso.py src/aso_platform/core/keywords.py src/aso_platform/cli.py
 ```
 
 ## Pull Request Checklist

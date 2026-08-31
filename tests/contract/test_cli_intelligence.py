@@ -4,7 +4,7 @@ import unittest
 from contextlib import redirect_stdout
 from unittest.mock import patch
 
-from src.aso_platform.cli import main
+from aso_platform.cli import main
 
 
 class CliIntelligenceContractTests(unittest.TestCase):
@@ -46,7 +46,7 @@ class CliIntelligenceContractTests(unittest.TestCase):
 
     def test_ios_inspect_json_contract_can_be_stubbed(self):
         output = io.StringIO()
-        with patch("src.aso_platform.cli.IOSInspectionService") as service_cls:
+        with patch("aso_platform.cli.IOSInspectionService") as service_cls:
             service_cls.return_value.inspect.return_value = {
                 "request_context": {"identifier": "com.example.ios", "sources": ["apple_itunes_lookup_api"]},
                 "ios_app": {"bundle_id": "com.example.ios", "title": "Stub iOS"},
@@ -64,7 +64,7 @@ class CliIntelligenceContractTests(unittest.TestCase):
 
     def test_metadata_audit_json_contract_can_be_stubbed(self):
         output = io.StringIO()
-        with patch("src.aso_platform.cli.MetadataAuditService") as service_cls:
+        with patch("aso_platform.cli.MetadataAuditService") as service_cls:
             service_cls.return_value.audit.return_value = {
                 "request_context": {"package_id": "com.example.app", "sources": ["google_play_public_store"]},
                 "metadata_audit": {"title_score": 80, "recommendations": []},

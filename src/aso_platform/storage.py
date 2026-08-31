@@ -7,7 +7,9 @@ from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any
 
-DEFAULT_HISTORY_PATH = Path(__file__).resolve().parents[2] / "data" / "rank_history.jsonl"
+from .paths import DATA_DIR
+
+DEFAULT_HISTORY_PATH = DATA_DIR / "rank_history.jsonl"
 
 
 class HistoryStore:

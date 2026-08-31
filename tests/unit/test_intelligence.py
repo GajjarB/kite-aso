@@ -1,7 +1,7 @@
 import unittest
 from datetime import UTC, datetime, timedelta
 
-from src.aso_platform.services.intelligence import RankHistoryService
+from aso_platform.services.intelligence import RankHistoryService
 
 class StubDataStore:
     def __init__(self, records=None):

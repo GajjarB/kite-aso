@@ -4,7 +4,7 @@ from __future__ import annotations
 
 from datetime import UTC, datetime
 
-from core.keywords import (
+from ..core.keywords import (
     build_keyword_candidates,
     build_public_search_enrichment,
     get_category_seed_keywords,

@@ -2,8 +2,8 @@ import tempfile
 import unittest
 from pathlib import Path
 
-from src.terminalcore.core.config.config_store import ConfigStore
-from src.terminalcore.core.services.doctor_service import DoctorService
+from terminalcore.core.config.config_store import ConfigStore
+from terminalcore.core.services.doctor_service import DoctorService
 
 
 class TerminalCoreDoctorTests(unittest.TestCase):

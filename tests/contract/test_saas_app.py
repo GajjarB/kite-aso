@@ -5,8 +5,8 @@ from pathlib import Path
 
 from fastapi.testclient import TestClient
 
-from src.aso_platform.saas_app import AppConfig, create_app
-from src.aso_platform.services.saas_store import SaasStore
+from aso_platform.saas_app import AppConfig, create_app
+from aso_platform.services.saas_store import SaasStore
 
 
 class SaasAppContractTests(unittest.TestCase):

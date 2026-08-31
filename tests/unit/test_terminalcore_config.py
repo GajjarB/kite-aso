@@ -3,9 +3,9 @@ import tempfile
 import unittest
 from pathlib import Path
 
-from src.terminalcore.core.config.config_schema import default_config, validate_config
-from src.terminalcore.core.config.config_store import ConfigStore
-from src.terminalcore.utils.errors import ConfigValidationError
+from terminalcore.core.config.config_schema import default_config, validate_config
+from terminalcore.core.config.config_store import ConfigStore
+from terminalcore.utils.errors import ConfigValidationError
 
 
 class TerminalCoreConfigTests(unittest.TestCase):

@@ -12,7 +12,7 @@ from datetime import UTC, datetime, timedelta
 from pathlib import Path
 from typing import Any
 
-DATA_ROOT = Path(__file__).resolve().parents[3] / "data"
+from ..paths import DATA_DIR as DATA_ROOT
 DEFAULT_DB_PATH = DATA_ROOT / "aso_saas.sqlite3"
 
 

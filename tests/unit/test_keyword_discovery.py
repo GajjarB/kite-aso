@@ -1,9 +1,9 @@
 import unittest
 from unittest.mock import MagicMock
 
-from src.aso_platform.models import KeywordDiscoveryReport
-from src.aso_platform.services.keyword_discovery import KeywordDiscoveryService
-from src.aso_platform.providers.play_store import PlayStoreSearchProvider
+from aso_platform.models import KeywordDiscoveryReport
+from aso_platform.services.keyword_discovery import KeywordDiscoveryService
+from aso_platform.providers.play_store import PlayStoreSearchProvider
 
 class TestKeywordDiscoveryService(unittest.TestCase):
     def setUp(self):

@@ -24,9 +24,30 @@
 
 ## Installation
 
+**Recommended — `pipx` puts the `kite` command on your PATH for you:**
+
+```bash
+pip install pipx
+pipx ensurepath
+pipx install kite-aso
+```
+
+Restart your terminal, then run `kite`.
+
+**Alternative — plain `pip`:**
+
 ```bash
 pip install kite-aso
 ```
+
+If your shell then reports that `kite` is not recognised, pip installed the
+command outside your PATH. Run it as a module instead — this always works:
+
+```bash
+python -m terminalcore
+```
+
+See [Troubleshooting](#troubleshooting) to put `kite` itself on your PATH.
 
 No cloning, no setup scripts, no manual configuration required.
 
@@ -191,7 +212,50 @@ Kite uses public data sources only:
 - No anti-bot evasion tactics
 - Uncertain or legally ambiguous sources are disabled, not silently used
 
-Source rules are defined in `config/source_registry.json`.
+Source rules are defined in `src/aso_platform/resources/source_registry.json`, which ships inside the package. To override it on an installed copy, put your own `source_registry.json` in `$KITE_HOME/config/`.
+
+---
+
+## Where Kite Stores Data
+
+Caches, reports, rank history, and workspaces live under a single user-owned
+directory, never inside the installed package:
+
+| Platform | Default location |
+|---|---|
+| macOS / Linux | `~/.kite` |
+| Windows | `%USERPROFILE%\.kite` |
+
+Set the `KITE_HOME` environment variable to move it somewhere else.
+
+---
+
+## Troubleshooting
+
+### `'kite' is not recognized as an internal or external command` (Windows)
+### `kite: command not found` (macOS / Linux)
+
+pip installed the launcher into a scripts directory that is not on your PATH.
+pip prints a warning naming that directory during install. Pick one fix:
+
+- **Run it as a module** - works everywhere, no PATH changes:
+  ```bash
+  python -m terminalcore
+  ```
+- **Reinstall with pipx**, which manages PATH for you:
+  ```bash
+  pip uninstall kite-aso
+  pipx install kite-aso
+  ```
+- **Add the directory to PATH manually.** On Windows it is usually
+  `%APPDATA%\Python\Python3XX\Scripts`; on macOS and Linux, `~/.local/bin`.
+  Add it via your shell profile or Settings -> Environment Variables, then open
+  a new terminal.
+
+### Commands run but cannot write files
+
+Kite writes to `~/.kite` (see above). If that path is not writable, point
+`KITE_HOME` at a directory that is.
 
 ---
 

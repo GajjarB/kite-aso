@@ -1,3 +1,0 @@
-[console_scripts]
-tc = src.terminalcore.cli.index:main
-terminalcore = src.terminalcore.cli.index:main

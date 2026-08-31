@@ -6,8 +6,9 @@ import json
 from pathlib import Path
 
 from .models import ComplianceStatus, FetchPolicy, SourceDescriptor
+from .paths import resource_path
 
-DEFAULT_REGISTRY_PATH = Path(__file__).resolve().parents[2] / "config" / "source_registry.json"
+DEFAULT_REGISTRY_PATH = resource_path("source_registry.json")
 
 
 class RegistryError(RuntimeError):

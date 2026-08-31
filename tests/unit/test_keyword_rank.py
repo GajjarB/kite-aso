@@ -2,8 +2,8 @@ import tempfile
 import unittest
 from pathlib import Path
 
-from src.aso_platform.services.keyword_rank import KeywordRankService, RankConfig
-from src.aso_platform.storage import HistoryStore
+from aso_platform.services.keyword_rank import KeywordRankService, RankConfig
+from aso_platform.storage import HistoryStore
 
 
 class StubSearchProvider:

@@ -7,9 +7,10 @@ from dataclasses import asdict, dataclass
 from pathlib import Path
 from typing import Any
 
+from .paths import resource_path
 from .registry import load_source_registry
 
-DEFAULT_CAPABILITY_PATH = Path(__file__).resolve().parents[2] / "config" / "capability_catalog.json"
+DEFAULT_CAPABILITY_PATH = resource_path("capability_catalog.json")
 
 
 @dataclass(frozen=True)

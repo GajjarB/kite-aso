@@ -9,8 +9,8 @@ import json
 from pathlib import Path
 from datetime import datetime
 
-REPORTS_DIR = Path(__file__).parent.parent / "reports"
-REPORTS_DIR.mkdir(exist_ok=True)
+from ..paths import REPORTS_DIR
+REPORTS_DIR.mkdir(parents=True, exist_ok=True)
 
 
 def save_report(name: str, data: dict) -> Path:

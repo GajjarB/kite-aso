@@ -12,7 +12,7 @@ import shutil
 from pathlib import Path
 from datetime import datetime
 
-sys.path.insert(0, str(Path(__file__).parent))
+sys.path.insert(0, str(Path(__file__).resolve().parent / "src"))
 
 from rich.console import Console
 from rich.table import Table
@@ -21,7 +21,7 @@ from rich.progress import Progress, SpinnerColumn, TextColumn
 from rich.rule import Rule
 from rich import box
 
-from src.aso_platform.ui.branding import APP_NAME
+from aso_platform.ui.branding import APP_NAME
 
 console = Console()
 
@@ -241,7 +241,7 @@ def _pkg_prompt(label: str = "Search app", allow_empty: bool = False) -> str:
 
     def _search(q: str):
         try:
-            from core.fetcher import search_apps
+            from aso_platform.core.fetcher import search_apps
             return [
                 {"title": r.get("title") or "", "package_id": r.get("package_id") or ""}
                 for r in search_apps(q, n_hits=8)
@@ -936,7 +936,7 @@ def _get_header_stats() -> dict:
 
     root = Path(__file__).parent
     try:
-        from src.aso_platform.registry import load_source_registry
+        from aso_platform.registry import load_source_registry
         sources = load_source_registry()
         approved = sum(
             1 for s in sources.values()
@@ -947,7 +947,7 @@ def _get_header_stats() -> dict:
         approved = 7
         total_sources = 8
     try:
-        from core.keywords import available_keyword_categories
+        from aso_platform.core.keywords import available_keyword_categories
         categories = len(available_keyword_categories())
     except Exception:
         categories = 18
@@ -1063,7 +1063,7 @@ def screen_app_inspector():
     if not package:
         return
 
-    from core.fetcher import validate_package_id, fetch_app_details
+    from aso_platform.core.fetcher import validate_package_id, fetch_app_details
     valid, pkg_err = validate_package_id(package)
     if not valid:
         error(pkg_err)
@@ -1157,12 +1157,12 @@ def screen_app_inspector():
         cols, _ = term_dims()
         console.print(f"  [{C_DIM}]Short:[/]  [italic]{data['summary'][:cols-12]}[/]")
 
-    from core.reporter import save_report
+    from aso_platform.core.reporter import save_report
     path = save_report("app_inspector", data)
     _invalidate_stats_cache()
     success(f"Report saved: {path.name}")
 
-    from core.watchlist import is_watched as _is_watched
+    from aso_platform.core.watchlist import is_watched as _is_watched
     already_watching = _is_watched(package)
     watch_label = (
         "Watching  ✓  (refresh snapshot)" if already_watching
@@ -1185,7 +1185,7 @@ def screen_app_inspector():
     elif next_action == "S":
         _run_similar_apps(package, data["title"])
     elif next_action == "W":
-        from core.watchlist import add_app
+        from aso_platform.core.watchlist import add_app
         add_app(package, data, platform="android")
         success(f"{'Snapshot saved' if already_watching else 'Added to Watch List'}: {data.get('title','')[:40]}")
         time.sleep(1)
@@ -1216,7 +1216,7 @@ def screen_keyword_research():
         return
     _SESSION["last_seeds"] = raw_input
 
-    from src.aso_platform.services.keyword_discovery import KeywordDiscoveryService
+    from aso_platform.services.keyword_discovery import KeywordDiscoveryService
     report = KeywordDiscoveryService().discover(
         seed_text=raw_input,
         category=category_input,
@@ -1268,9 +1268,9 @@ def screen_keyword_research():
         "Play Store autocomplete not used until source policy is approved."
     ]
     try:
-        from src.aso_platform.registry import ensure_source_approved, get_source
+        from aso_platform.registry import ensure_source_approved, get_source
         ensure_source_approved(get_source("google_trends_public"))
-        from core.keywords import get_google_trends
+        from aso_platform.core.keywords import get_google_trends
         trend_data = spin("Fetching Google Trends...", get_google_trends, [i["keyword"] for i in report["keywords"]][:10])
     except Exception as e:
         trend_data = {
@@ -1279,7 +1279,7 @@ def screen_keyword_research():
         }
         policy_warnings.append(f"Google Trends skipped: {e}")
 
-    from core.keywords import score_keywords
+    from aso_platform.core.keywords import score_keywords
     scored = score_keywords(report["keywords"], trend_data)
     report["keywords"] = scored
 
@@ -1332,7 +1332,7 @@ def screen_keyword_research():
         for i, q in enumerate(related[:8], 1):
             console.print(f"  [{C_BRAND}]{i:2}.[/] {q}")
 
-    from core.reporter import save_report
+    from aso_platform.core.reporter import save_report
     save_data = {
         "seed": combined_seeds[0] if combined_seeds else raw_input,
         "category": category_review,
@@ -1419,7 +1419,7 @@ def screen_competitor_analysis():
     _SESSION["last_query"] = query
 
     try:
-        from core.fetcher import search_apps
+        from aso_platform.core.fetcher import search_apps
         results = spin(f"Searching for \"{query}\"...", search_apps, query, n_hits=10)
     except Exception as e:
         error(f"Search failed: {e}")
@@ -1457,7 +1457,7 @@ def screen_competitor_analysis():
     )
     selected = [results[i] for i in indices if i < len(results)]
 
-    from core.fetcher import fetch_app_details, validate_package_id
+    from aso_platform.core.fetcher import fetch_app_details, validate_package_id
     full_apps = []
     for sel in selected:
         try:
@@ -1485,7 +1485,7 @@ def screen_competitor_analysis():
         else:
             warn(f"Invalid package ID: {pkg_err}")
 
-    from core.analyzer import compare_metadata
+    from aso_platform.core.analyzer import compare_metadata
     comparison = (
         compare_metadata(reference_app, full_apps)
         if reference_app
@@ -1516,7 +1516,7 @@ def screen_competitor_analysis():
 
     # ── Keyword overlap (quick insight) ────────────────────────
     try:
-        from core.keywords import find_keyword_gaps
+        from aso_platform.core.keywords import find_keyword_gaps
         if reference_app:
             gaps = find_keyword_gaps(reference_app, full_apps)
         else:
@@ -1530,7 +1530,7 @@ def screen_competitor_analysis():
     except Exception:
         pass
 
-    from core.reporter import save_report
+    from aso_platform.core.reporter import save_report
     path = save_report("competitor_analysis", {
         "query": query,
         "comparison": comparison,
@@ -1577,11 +1577,11 @@ def _run_metadata_analysis(prefill: dict = None):
             lines.append(line)
         long_d = "\n".join(lines)
 
-    from core.analyzer import analyze_metadata
+    from aso_platform.core.analyzer import analyze_metadata
     result = spin("Analyzing...", analyze_metadata, title, short, long_d)
     _display_metadata_report(result)
 
-    from core.reporter import save_report
+    from aso_platform.core.reporter import save_report
     result["title_text"] = title
     path = save_report("metadata_analysis", result)
     _invalidate_stats_cache()
@@ -1749,7 +1749,7 @@ def screen_keyword_gap():
 
     comp_pkgs = [p.strip() for p in comp_raw.split(",") if p.strip()]
 
-    from core.fetcher import fetch_app_details
+    from aso_platform.core.fetcher import fetch_app_details
     try:
         your_app = spin("Fetching your app...", fetch_app_details, your_pkg)
     except Exception as e:
@@ -1769,7 +1769,7 @@ def screen_keyword_gap():
         pause()
         return
 
-    from core.keywords import find_keyword_gaps
+    from aso_platform.core.keywords import find_keyword_gaps
     gaps = spin("Analyzing keyword gaps...", find_keyword_gaps, your_app, comp_apps)
 
     console.print()
@@ -1835,7 +1835,7 @@ def screen_keyword_gap():
     else:
         warn("No unique keywords found. Heavy overlap with competitors.")
 
-    from core.reporter import save_report
+    from aso_platform.core.reporter import save_report
     report_data = {"your_app": your_pkg, "competitors": comp_pkgs, "gaps": gaps}
     path = save_report("keyword_gap", report_data)
     _invalidate_stats_cache()
@@ -1848,7 +1848,7 @@ def screen_keyword_gap():
         ("Done — back to menu",                    "back"),
     ])
     if export_choice == "csv":
-        from core.reporter import export_gaps_csv
+        from aso_platform.core.reporter import export_gaps_csv
         csv_path = export_gaps_csv(report_data)
         if csv_path:
             success(f"CSV saved: {csv_path.name}")
@@ -1891,7 +1891,7 @@ def screen_google_trends():
     }
     timeframe, tf_label = tf_map[tf_choice]
 
-    from core.keywords import get_google_trends
+    from aso_platform.core.keywords import get_google_trends
     try:
         trend_data = spin(f"Fetching Google Trends ({tf_label})...", get_google_trends, keywords, timeframe)
     except Exception as e:
@@ -1962,7 +1962,7 @@ def screen_google_trends():
         for q in related[:8]:
             console.print(f"  [{C_ACCENT}]>[/] {q}")
 
-    from core.reporter import save_report
+    from aso_platform.core.reporter import save_report
     path = save_report("google_trends", {
         "keywords": keywords, "timeframe": tf_label, "data": trend_data,
     })
@@ -1989,7 +1989,7 @@ def screen_review_miner():
 
     title = package
     try:
-        from core.fetcher import fetch_app_details
+        from aso_platform.core.fetcher import fetch_app_details
         app_data = spin("Fetching app info...", fetch_app_details, package)
         title = app_data.get("title", package)
     except Exception:
@@ -1999,8 +1999,8 @@ def screen_review_miner():
 
 
 def _run_review_miner(package: str, title: str):
-    from core.fetcher import fetch_reviews
-    from core.keywords import mine_review_keywords, get_google_trends, score_keywords
+    from aso_platform.core.fetcher import fetch_reviews
+    from aso_platform.core.keywords import mine_review_keywords, get_google_trends, score_keywords
 
     count_choice = action_select([
         ("50 reviews  (fast)",   "50"),
@@ -2095,7 +2095,7 @@ def _run_review_miner(package: str, title: str):
             except Exception as e:
                 warn(f"Trends unavailable: {e}")
 
-    from core.reporter import save_report
+    from aso_platform.core.reporter import save_report
     path = save_report("review_miner", {
         "package": package, "title": title,
         "review_count": count, "mined_data": mined,
@@ -2111,7 +2111,7 @@ def _run_review_miner(package: str, title: str):
 
 def screen_saved_reports():
     header("Saved Reports")
-    from core.reporter import list_reports
+    from aso_platform.core.reporter import list_reports
 
     reports = list_reports()
     if not reports:
@@ -2171,7 +2171,7 @@ def screen_saved_reports():
         if 0 <= idx < len(reports):
             path = reports_path / reports[idx]["file"]
             try:
-                from core.reporter import export_keywords_csv, export_gaps_csv
+                from aso_platform.core.reporter import export_keywords_csv, export_gaps_csv
                 data = json.loads(path.read_text(encoding="utf-8"))
                 csv_path = export_keywords_csv(data) or export_gaps_csv({"gaps": data.get("gaps", {})})
                 if csv_path:
@@ -2294,7 +2294,7 @@ def screen_keyword_rank():
     lang    = Prompt.ask(f"  [{C_BRAND}]Language[/]", default="en").strip().lower()
 
     try:
-        from src.aso_platform.services.keyword_rank import KeywordRankService
+        from aso_platform.services.keyword_rank import KeywordRankService
         service = KeywordRankService()
         report = spin(
             f"Scanning Play Store for \"{keyword}\" (top {limit_choice})...",
@@ -2353,7 +2353,7 @@ def screen_keyword_rank():
             f"{item.get('installs', ''):<10}"
         )
 
-    from core.reporter import save_report
+    from aso_platform.core.reporter import save_report
     path = save_report("keyword_rank", report)
     _invalidate_stats_cache()
     success(f"Report saved: {path.name}")
@@ -2368,7 +2368,7 @@ def _run_similar_apps(package_id: str, title: str):
     """Show apps similar to the given package and optionally compare them."""
     header(f"Similar Apps  —  {title[:40]}")
 
-    from core.fetcher import fetch_similar_apps
+    from aso_platform.core.fetcher import fetch_similar_apps
     try:
         similar = spin("Finding similar apps...", fetch_similar_apps, package_id)
     except Exception as e:
@@ -2404,8 +2404,8 @@ def _run_similar_apps(package_id: str, title: str):
     ])
 
     if action == "compare":
-        from core.fetcher import fetch_app_details
-        from core.analyzer import compare_metadata
+        from aso_platform.core.fetcher import fetch_app_details
+        from aso_platform.core.analyzer import compare_metadata
         full = []
         for app in similar[:3]:
             pkg = app.get("package_id", "")
@@ -2436,7 +2436,7 @@ def screen_ios_inspector():
     # iOS search uses iTunes API, not Play Store
     def _ios_search(q: str) -> list:
         try:
-            from core.ios_fetcher import search_ios_apps
+            from aso_platform.core.ios_fetcher import search_ios_apps
             return [
                 {"title": r.get("title") or "", "package_id": r.get("bundle_id") or ""}
                 for r in search_ios_apps(q, limit=8)
@@ -2460,7 +2460,7 @@ def screen_ios_inspector():
     if not raw:
         return
 
-    from core.ios_fetcher import extract_bundle_from_url, fetch_ios_app
+    from aso_platform.core.ios_fetcher import extract_bundle_from_url, fetch_ios_app
     identifier = extract_bundle_from_url(raw)
 
     try:
@@ -2543,7 +2543,7 @@ def screen_ios_inspector():
         preview = (data["description"] or "")[:cols - 12]
         console.print(f"  [{C_DIM}]Desc:[/]   [italic]{preview}[/]")
 
-    from core.reporter import save_report
+    from aso_platform.core.reporter import save_report
     path = save_report("ios_inspector", data)
     _invalidate_stats_cache()
     success(f"Report saved: {path.name}")
@@ -2555,7 +2555,7 @@ def screen_ios_inspector():
     ])
 
     if next_action == "W":
-        from core.watchlist import add_app
+        from aso_platform.core.watchlist import add_app
         add_app(
             data.get("bundle_id") or identifier,
             data,
@@ -2572,7 +2572,7 @@ def screen_ios_inspector():
 def screen_watchlist():
     """Track watched apps, view rating sparklines and metadata change diffs."""
     header("Watch List")
-    from core.watchlist import get_all, remove_app, refresh_snapshot, get_delta, get_score_history
+    from aso_platform.core.watchlist import get_all, remove_app, refresh_snapshot, get_delta, get_score_history
 
     wl = get_all()
     apps = wl.get("apps", {})
@@ -2636,8 +2636,8 @@ def screen_watchlist():
     ])
 
     if action == "refresh":
-        from core.fetcher import fetch_app_details
-        from core.ios_fetcher import fetch_ios_app
+        from aso_platform.core.fetcher import fetch_app_details
+        from aso_platform.core.ios_fetcher import fetch_ios_app
         any_fail = False
         for pkg_id, entry in items:
             platform = entry.get("platform", "android")

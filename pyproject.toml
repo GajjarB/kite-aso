@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "kite-aso"
-version = "1.0.0"
+version = "1.0.1"
 description = "Kite — a keyboard-first ASO intelligence platform with a hybrid CLI and TUI workspace."
 readme = "README.md"
 requires-python = ">=3.11"
@@ -47,13 +47,22 @@ Repository = "https://github.com/GajjarB/kite-aso"
 "Bug Tracker" = "https://github.com/GajjarB/kite-aso/issues"
 
 [project.scripts]
-terminalcore = "src.terminalcore.cli.index:main"
-tc = "src.terminalcore.cli.index:main"
-kite = "src.terminalcore.cli.index:main"
-aso-saas = "src.aso_platform.saas_app:main"
+terminalcore = "terminalcore.cli.index:main"
+tc = "terminalcore.cli.index:main"
+kite = "terminalcore.cli.index:main"
+aso-saas = "aso_platform.saas_app:main"
 
 [tool.setuptools.packages.find]
-include = ["src*"]
+where = ["src"]
+include = ["terminalcore*", "aso_platform*"]
+
+[tool.setuptools.package-dir]
+"" = "src"
 
 [tool.setuptools.package-data]
+"aso_platform" = ["resources/*.json", "web/*"]
 "*" = ["*.json", "*.md", "*.txt", "*.yaml", "*.yml"]
+
+[tool.pytest.ini_options]
+pythonpath = ["src"]
+testpaths = ["tests"]

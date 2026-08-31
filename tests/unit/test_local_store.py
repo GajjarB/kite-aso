@@ -2,7 +2,7 @@ import tempfile
 import unittest
 from pathlib import Path
 
-from src.aso_platform.services.local_store import LocalDataStore
+from aso_platform.services.local_store import LocalDataStore
 
 
 class LocalDataStoreTests(unittest.TestCase):
