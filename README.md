@@ -191,7 +191,7 @@ Config is stored at `~/.terminalcore/config.json` and created automatically on f
 {
   "workspaceName": "Kite",
   "environment": "development",
-  "theme": "claude-warm",
+  "theme": "kite-warm",
   "version": "1.0.0"
 }
 ```

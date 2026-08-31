@@ -7,7 +7,7 @@ from pathlib import Path
 
 from ...utils.errors import ConfigValidationError
 from ...utils.paths import CONFIG_PATH, ensure_app_dir
-from .config_schema import default_config, validate_config
+from .config_schema import default_config, normalize_theme, validate_config
 from ..types import AppConfig
 
 
@@ -54,7 +54,7 @@ class ConfigStore:
         elif key == "environment":
             payload["environment"] = value.lower()
         elif key == "theme":
-            payload["theme"] = value.lower()
+            payload["theme"] = normalize_theme(value)
         elif key == "demoData":
             payload["demo_data"] = value.lower() in {"1", "true", "yes", "on"}
         else:

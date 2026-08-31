@@ -15,7 +15,7 @@ from ..utils.format import title_case_env
 console = Console()
 
 THEME_CHOICES = {
-    "1": ("claude-warm", "Claude Warm"),
+    "1": ("kite-warm", "Kite Warm"),
     "2": ("classic-dark", "Classic Dark"),
     "3": ("minimal-light", "Minimal Light"),
 }

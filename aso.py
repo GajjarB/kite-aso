@@ -35,8 +35,8 @@ _SESSION: dict = {
     "pkg_history": [],      # last 5 unique package IDs
 }
 
-# ── Rich markup colors (Claude Code palette) ──────────────────
-C_BRAND    = "#CC785C"      # Claude orange
+# ── Rich markup colors (Kite warm palette) ────────────────────
+C_BRAND    = "#CC785C"      # Kite orange
 C_ACCENT   = "#4EC9A0"      # teal-green
 C_WARN     = "#E5C07B"      # amber
 C_ERROR    = "#E06C75"      # rose-red

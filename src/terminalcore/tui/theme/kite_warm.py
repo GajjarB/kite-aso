@@ -24,4 +24,4 @@ class TerminalTheme:
     info: str = "#7DA7C7"
 
 
-CLAUDE_WARM = TerminalTheme()
+KITE_WARM = TerminalTheme()
